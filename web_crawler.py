@@ -3,19 +3,23 @@ from bs4 import BeautifulSoup
 import json
 
 page = requests.get(
-    "https://www.factcheck.org/2023/04/scicheck-fewer-cases-of-flu-due-to-pandemic-precautions-contrary-to-viral-claim/")
+    "https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/")
 soup = BeautifulSoup(page.content, 'html.parser')
 page_title = soup.title.text[:-15]
 page_author = soup.find('p', class_='byline').text
 page_posted = soup.find('p', class_='posted-on').text
+# print(page_posted)
 
 
-page_subheading = soup.find('p', class_='wp-block-heading')
-print(page_subheading)
+page_subheading = soup.find('h2', class_='wp-block-heading')
+# print(page_subheading.text)
 
 
-# for headlines in soup.find_all("h2"):
-#     print(headlines.contents[0])
+# for headlines in soup.find_all("h2", class_='wp-block-heading'):
+#     print(headlines.text)
+
+# for i in soup.find('div', class_="'entry-content"):
+
 
 # for i in soup.find_all(class_='wp-block-heading'):
 #     j = i.find_all('p')
@@ -24,9 +28,17 @@ print(page_subheading)
 
 
 # Print text
-# s = soup.find('div', class_='entry-content')
-# lines = s.find_all('p')
-# print(lines)
+s = soup.find_all('div', class_='entry-content')
+for i in s:
+    if str(i).find('</h2>'):
+        print(i)
+        
+
+
+
+# for i in lines
+
+# print(s)
 all_lines=[]
 # for line in lines:
     # all_lines.append(line.text)
