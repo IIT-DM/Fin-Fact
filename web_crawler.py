@@ -8,7 +8,6 @@ soup = BeautifulSoup(page.content, 'html.parser')
 page_title = soup.title.text[:-15]
 page_author = soup.find('p', class_='byline').text
 page_posted = soup.find('p', class_='posted-on').text
-# print(page_posted)
 
 
 page_subheading = soup.find('h2', class_='wp-block-heading')
