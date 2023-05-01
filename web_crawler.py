@@ -9,66 +9,33 @@ page_title = soup.title.text[:-15]
 page_author = soup.find('p', class_='byline').text
 page_posted = soup.find('p', class_='posted-on').text
 
+fullstory_tag = soup.find("h2", string="Full Story")
+sources_tag = fullstory_tag.find_next("h2", string="Sources")
+issues_tag = soup.find_all("li", class_="issue")
 
-page_subheading = soup.find('h2', class_='wp-block-heading')
-# print(page_subheading.text)
+paragraph_list = []
+citation_list = []
+issue_list = []
 
+for sibling in fullstory_tag.find_next_siblings():
+    if sibling.name == "h2" and sibling == sources_tag:
+        break
+    elif sibling.name == "p":
+        paragraph_list.append(sibling)
+for p_text in paragraph_list:
+    print(p_text.text)
 
-# for headlines in soup.find_all("h2", class_='wp-block-heading'):
-#     print(headlines.text)
+for paragraph_tag in paragraph_list:
+    link_tags = paragraph_tag.find_all("a")
+    for links in link_tags:
+        citation_list.append(links["href"])
+for citations in citation_list:
+    print(citations)
 
-# for i in soup.find('div', class_="'entry-content"):
-
-
-# for i in soup.find_all(class_='wp-block-heading'):
-#     j = i.find_all('p')
-#     print(j)
-
-
-
-# Print text
-s = soup.find_all('div', class_='entry-content')
-for i in s:
-    if str(i).find('</h2>'):
-        print(i)
-        
-
-
-
-# for i in lines
-
-# print(s)
-all_lines=[]
-# for line in lines:
-    # all_lines.append(line.text)
-    # print(line.text)
-# print(all_lines)
-
-# Print entire text
-# print(soup.get_text()) 
-
-# Print all links
-# for link in soup.find_all('a'):
-    # print(link.get('href'))
-
-
-# dictionary = {
-# 	"title": page_title,
-# 	"rollno": 56,
-# 	"cgpa": 8.6,
-# 	"phonenumber": "9976770500"
-# }
-
-# # Serializing json
-# json_object = json.dumps(dictionary, indent=4)
-
-# # Writing to sample.json
-# with open("sample.json", "w") as outfile:
-# 	outfile.write(json_object)
-
-
-
-
+for issues in issues_tag:
+    issue_list.append(issues.text[6:])
+for iss in issue_list:
+    print(iss)
 
 
 
