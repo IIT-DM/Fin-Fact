@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-
+import re
 # page = requests.get(
 #     "https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/")
 # soup = BeautifulSoup(page.content, 'html.parser')
@@ -80,8 +80,8 @@ sci_digest_list = []
 p_tags = sci_digest.find_next_siblings("p")
 for p in p_tags:
     sci_digest_list.append(p.text)
-for p_text in sci_digest_list:
-    print(p_text,"\n")
+# for p_text in sci_digest_list:
+#     print(p_text,"\n")
 
 paragraph_list = []
 for sibling in heading_tag.find_next_siblings():
@@ -89,30 +89,39 @@ for sibling in heading_tag.find_next_siblings():
         break
     elif sibling.name == "p":
         paragraph_list.append(sibling)
-for paragraph_tag in paragraph_list:
-    print(paragraph_tag.text)
+# for paragraph_tag in paragraph_list:
+#     print(paragraph_tag.text)
 
+sentences_with_citations=[]
 citation_list = []
 for paragraph_tag in paragraph_list:
     link_tags = paragraph_tag.find_all("a")
     for link_tag in link_tags:
         citation_list.append(link_tag["href"])
-for citations in citation_list:
-    print(citations)
+        if link_tag.has_attr("href") and link_tag["href"].startswith("http"):
+            link_text = link_tag.get_text().strip()
+            escaped_text = re.escape(link_text)
+        for sentence in re.findall(f"[^.]*?{escaped_text}[^.]*\.", soup.get_text()):
+            sentences_with_citations.append(sentence)
 
+# for citations in citation_list:
+#     print(citations)
+
+print(len(sentences_with_citations))
+print(len(citation_list))
 issue_list = []
 for issues in issues_tag:
     issue_list.append(issues.text[6:])
-for iss in issue_list:
-    print(iss)
+# for iss in issue_list:
+#     print(iss)
 
 image_div = soup.find("div", class_="wp-block-image")
 image_caption = soup.find("figcaption", class_="wp-element-caption").text
 
 img_tag = image_div.find("img")
 img_src = img_tag['src']
-print(img_src)
-print(image_caption)
+# print(img_src)
+# print(image_caption)
 
 
 '''
