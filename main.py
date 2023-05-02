@@ -63,11 +63,11 @@ class WebScraper:
                 if sibling.name == "h2" and sibling == next_heading_tag:
                     break
                 elif sibling.name == "p":
-                    paragraph_list.append(sibling.text)
-            final_paragraph = ", ".join(paragraph_list)
+                    paragraph_list.append(sibling)
+            final_paragraphs = ", ".join([p.text for p in paragraph_list])
         except:
             print("Error: Failed to get paragraphs.")
-        return paragraph_list, final_paragraph
+        return paragraph_list, final_paragraphs
     
     def get_citation_list(self, paragraph_list):
         citation_list = []
@@ -103,35 +103,20 @@ class WebScraper:
             print("Error: Failed to get image info.")
         return img_src, image_caption
 
-
 url = 'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/'
 scraper = WebScraper(url)
-# print(scraper.get_page_title())
-# print(scraper.get_page_author())
-# print(scraper.get_page_posted_date())
-# print(scraper.get_sci_check_digest())
-paragraph_list = scraper.get_paragraph_list()[0]
-print(paragraph_list)
-for paragraph_tag in paragraph_list:
-    print(paragraph_tag)
-citation_list = scraper.get_citation_list(paragraph_list)
-print(citation_list)
-# for citation in citation_list:
-#     print(citation)
-# print(scraper.get_issue_list())
-# print(scraper.get_image_info()[1])
 
-# data = {
-#     "title": scraper.get_page_title(),
-#     "author": scraper.get_page_author(),
-#     "posted": scraper.get_page_posted_date(),
-#     "sci_digest": scraper.get_sci_check_digest(),
-#     "paragraphs": scraper.get_paragraph_list()[1],
-#     "citations": citation_list,
-#     "issues": scraper.get_issue_list(),
-#     "image_src": scraper.get_image_info()[0],
-#     "image_caption": scraper.get_image_info()[1]
-# }
+data = {
+    "title": scraper.get_page_title(),
+    "author": scraper.get_page_author(),
+    "posted": scraper.get_page_posted_date(),
+    "sci_digest": scraper.get_sci_check_digest(),
+    "paragraphs": scraper.get_paragraph_list()[1],
+    "citations": scraper.get_citation_list(scraper.get_paragraph_list()[0]),
+    "issues": scraper.get_issue_list(),
+    "image_src": scraper.get_image_info()[0],
+    "image_caption": scraper.get_image_info()[1]
+}
 
-# with open("scraped_data.json", "w") as outfile:
-#     json.dump(data, outfile)
+with open("scraped_data.json", "w") as outfile:
+    json.dump(data, outfile)
