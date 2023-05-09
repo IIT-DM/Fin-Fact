@@ -16,14 +16,16 @@ class WebScraper:
                 self.soup = BeautifulSoup(self.page.content, 'html.parser')
             except:
                 print("Error: Failed to create BeautifulSoup object.")
-    
+
+    def remove_unicode(self, string):
+        return string.encode('ascii', 'ignore').decode('utf-8')
+
     def get_page_title(self):
         page_title = None
         try:
             page_title = self.soup.title.text[:-15]
         except:
-            # print("Error: Failed to get page title.")
-            return 0
+            return 0 # Error: Failed to get page title.
         return page_title
     
     def get_page_author(self):
@@ -31,8 +33,7 @@ class WebScraper:
         try:
             page_author = self.soup.find('p', class_='byline').text[4:]
         except:
-            # print("Error: Failed to get page author.")
-            return 0
+            return 0 # Error: Failed to get page author.
         return page_author
     
     def get_page_posted_date(self):
@@ -40,8 +41,7 @@ class WebScraper:
         try:
             page_posted = self.soup.find('p', class_='posted-on').text
         except:
-            # print("Error: Failed to get page posted date.")
-            return 0
+            return 0 # Error: Failed to get page posted date.
         return page_posted
     
     def get_sci_check_digest(self):
@@ -53,10 +53,10 @@ class WebScraper:
                 for p in p_tags:
                     sci_digest_list.append(p.text)
             final_sci_digest = ", ".join(sci_digest_list)
+            cleaned_sci_digest = self.remove_unicode(final_sci_digest)
         except:
-            # print("Error: Failed to get SciCheck digest.")
-            return 0
-        return final_sci_digest
+            return 0 # Error: Failed to get SciCheck digest.
+        return cleaned_sci_digest
     
     def get_paragraph_list(self):
         paragraph_list = []
@@ -69,10 +69,10 @@ class WebScraper:
                 elif sibling.name == "p":
                     paragraph_list.append(sibling)
             final_paragraphs = ", ".join([p.text for p in paragraph_list])
+            cleaned_paragraphs = self.remove_unicode(final_paragraphs)
         except:
-            # print("Error: Failed to get paragraphs.")
-            return 0, 0
-        return paragraph_list, final_paragraphs
+            return 0, 0 # Error: Failed to get paragraphs.
+        return paragraph_list, cleaned_paragraphs
     
     def get_citation_list(self, paragraph_list):
         citation_list = []
@@ -82,8 +82,7 @@ class WebScraper:
                 for link_tag in link_tags:
                     citation_list.append(link_tag["href"])
         except:
-            # print("Error: Failed to get citation list.")
-            return 0
+            return 0 # Error: Failed to get citation list.
         return citation_list
     
     def get_issue_list(self):
@@ -95,8 +94,7 @@ class WebScraper:
                 new_string = ''.join(issue_list).replace('\n\n', ',')
                 final_list = [word.strip() for word in new_string.split(',') if word.strip()]
         except:
-            # print("Error: Failed to get issue list.")
-            return 0
+            return 0 # Error: Failed to get issue list.
         return final_list
     
     def get_image_info(self):
@@ -107,8 +105,7 @@ class WebScraper:
             img_src = img_tag['src']
             image_caption = self.soup.find("figcaption", class_="wp-element-caption").text
         except:
-            # print("Error: Failed to get image info.")
-            return 0, 0
+            return 0, 0 # Error: Failed to get image info.
         return img_src, image_caption
 
 # url = 'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/'
