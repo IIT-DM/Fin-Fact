@@ -13,16 +13,16 @@ while True:
     if current_tag == source_tag:
         break
     if current_tag.name == "a":
-        # print(current_tag.text)
-        print()
-    elif current_tag.name == "p":
-        sentences = current_tag.text.split(". ")
-        for sentence in sentences:
-            if "http" in sentence:
-                print(sentence.strip())
-                print(current_tag.find("a").get("href"))
-                print()
-            else:
-                print(sentence.strip())
-                print()
+        print(current_tag.text)
+        # print()
+    # elif current_tag.name == "p":
+    #     sentences = current_tag.text.split(". ")
+    #     for sentence in sentences:
+    #         if "http" in sentence:
+    #             print(sentence.strip())
+    #             print(current_tag.find("a").get("href"))
+    #             print()
+    #         else:
+    #             print(sentence.strip())
+    #             print()
 

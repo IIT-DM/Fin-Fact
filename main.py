@@ -52,7 +52,7 @@ class WebScraper:
                 p_tags = sci_digest.find_next_siblings("p")
                 for p in p_tags:
                     sci_digest_list.append(p.text)
-            final_sci_digest = ", ".join(sci_digest_list)
+            final_sci_digest = " ".join(sci_digest_list)
             cleaned_sci_digest = self.remove_unicode(final_sci_digest)
         except:
             return 0 # Error: Failed to get SciCheck digest.
@@ -68,7 +68,7 @@ class WebScraper:
                     break
                 elif sibling.name == "p":
                     paragraph_list.append(sibling)
-            final_paragraphs = ", ".join([p.text for p in paragraph_list])
+            final_paragraphs = " ".join([p.text for p in paragraph_list])
             myString = final_paragraphs.replace('\u00a0', ' ')
             cleaned_paragraphs = self.remove_unicode(myString)
         except:

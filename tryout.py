@@ -70,7 +70,7 @@ class WebScraper:
                     break
                 elif sibling.name == "p":
                     paragraph_list.append(sibling)
-            final_paragraphs = ", ".join([p.text for p in paragraph_list])
+            final_paragraphs = " ".join([p.text for p in paragraph_list])
             myString = final_paragraphs.replace('\u00a0', ' ')
             # myString = re.sub('[\r\n\t\f\v]+', ' ', myString)
             # cleaned_paragraphs = " ".join(final_paragraphs.split())
@@ -113,8 +113,8 @@ class WebScraper:
             return 0, 0 # Error: Failed to get image info.
         return img_src, image_caption
 
-# url = 'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/'
-url = 'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/'
+url = 'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/'
+# url = 'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/'
 scraper = WebScraper(url)
 data = {
     "title": scraper.get_page_title(),
