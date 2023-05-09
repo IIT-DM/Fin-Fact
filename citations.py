@@ -18,8 +18,10 @@ while True:
         sentences = current_tag.text.split(". ")
         for sentence in sentences:
             if "http" in sentence:
-                print(sentence.strip())
+                # print(sentence.strip())
                 print(current_tag.find("a").get("href"))
+                print()
             else:
-                print(sentence.strip())
+                # print(sentence.strip())
+                print()
 
