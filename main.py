@@ -69,7 +69,8 @@ class WebScraper:
                 elif sibling.name == "p":
                     paragraph_list.append(sibling)
             final_paragraphs = ", ".join([p.text for p in paragraph_list])
-            cleaned_paragraphs = self.remove_unicode(final_paragraphs)
+            myString = final_paragraphs.replace('\u00a0', ' ')
+            cleaned_paragraphs = self.remove_unicode(myString)
         except:
             return 0, 0 # Error: Failed to get paragraphs.
         return paragraph_list, cleaned_paragraphs
@@ -108,8 +109,8 @@ class WebScraper:
             return 0, 0 # Error: Failed to get image info.
         return img_src, image_caption
 
-# url = 'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/'
-url = 'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/'
+url = 'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/'
+# url = 'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/'
 scraper = WebScraper(url)
 
 data = {
@@ -118,7 +119,8 @@ data = {
     "posted": scraper.get_page_posted_date(),
     "sci_digest": scraper.get_sci_check_digest(),
     "paragraphs": scraper.get_paragraph_list()[1],
-    "citations": scraper.get_citation_list(scraper.get_paragraph_list()[0]),
+    # "citations": scraper.get_citation_list(scraper.get_paragraph_list()[0]),
+    "evidence": [{"e{}".format(i+1): value} for i, value in enumerate(scraper.get_citation_list(scraper.get_paragraph_list()[0]))],
     "issues": scraper.get_issue_list(),
     "image_src": scraper.get_image_info()[0],
     "image_caption": scraper.get_image_info()[1]

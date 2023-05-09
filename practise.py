@@ -61,8 +61,8 @@ image_caption = soup.find("figcaption", class_="wp-element-caption").text
 
 img_tag = image_div.find("img")
 img_src = img_tag['src']
-# print(img_src)
-# print(image_caption)
+print(img_src)
+print(image_caption)
 
 
 '''
