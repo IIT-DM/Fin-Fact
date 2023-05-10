@@ -6,7 +6,6 @@ import nltk
 from datetime import datetime
 
 
-
 class WebScraper:
     def __init__(self, url):
         self.url = url
@@ -113,7 +112,7 @@ class WebScraper:
     def get_image_info(self):
         img_src, image_caption = None, None
         try:
-            image_div = self.soup.find("div", class_="wp-block-image")
+            image_div = self.soup.find("figure", class_="alignright size-large is-resized")
             img_tag = image_div.find("img")
             img_src = img_tag['src']
             image_caption = self.soup.find("figcaption", class_="wp-element-caption").text

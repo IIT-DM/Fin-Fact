@@ -47,7 +47,7 @@ for issues in issues_tag:
 for iss in issue_list:
     print(iss)
 
-image_div = soup.find("div", class_="wp-block-image")
+image_div = soup.find("figure", class_="alignright size-large is-resized")
 image_caption = soup.find("figcaption", class_="wp-element-caption").text
 
 img_tag = image_div.find("img")
