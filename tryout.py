@@ -3,7 +3,9 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import nltk
-nltk.download('punkt')
+from datetime import datetime
+
+
 
 class WebScraper:
     def __init__(self, url):
@@ -27,9 +29,10 @@ class WebScraper:
         page_title = None
         try:
             page_title = self.soup.title.text[:-15]
+            cleaned_page_title = self.remove_unicode(page_title)
         except:
             return 0 # Error: Failed to get page title.
-        return page_title
+        return cleaned_page_title
     
     def get_page_author(self):
         page_author = None
@@ -42,10 +45,12 @@ class WebScraper:
     def get_page_posted_date(self):
         page_posted = None
         try:
-            page_posted = self.soup.find('p', class_='posted-on').text
+            page_posted = self.soup.find('p', class_='posted-on').text[10:]
+            date_object = datetime.strptime(page_posted, "%B %d, %Y")
+            formatted_date = date_object.strftime("%m/%d/%Y")
         except:
             return 0 # Error: Failed to get page posted date.
-        return page_posted
+        return formatted_date
     
     def get_sci_check_digest(self):
         sci_digest_list = []
@@ -136,8 +141,8 @@ class WebScraper:
             return 0
         return data
 
-# url = 'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/'
-url = 'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/'
+url = 'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/'
+# url = 'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/'
 scraper = WebScraper(url)
 data = {
     "title": scraper.get_page_title(),
@@ -145,11 +150,9 @@ data = {
     "posted": scraper.get_page_posted_date(),
     "sci_digest": scraper.get_sci_check_digest(),
     "paragraphs": scraper.get_paragraph_list()[1],
-    # "evidence": [{"e{}".format(i+1): value} for i, value in enumerate(scraper.get_citation_list(scraper.get_paragraph_list()[0]))],
     "issues": scraper.get_issue_list(),
-    "image_src": scraper.get_image_info()[0],
-    "image_caption": scraper.get_image_info()[1],
-    "data": scraper.get_sentences_citations()
+    "image_data": [{"image_src": scraper.get_image_info()[0], "image_caption": scraper.get_image_info()[1]}],
+    "citations_data": scraper.get_sentences_citations()
 }
 
 # Convert the dictionary to JSON and write it to a file

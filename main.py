@@ -1,8 +1,10 @@
+import json
 import requests
 from bs4 import BeautifulSoup
 import json
 import nltk
-nltk.download('punkt')
+from datetime import datetime
+
 
 class WebScraper:
     def __init__(self, url):
@@ -26,9 +28,10 @@ class WebScraper:
         page_title = None
         try:
             page_title = self.soup.title.text[:-15]
+            cleaned_page_title = self.remove_unicode(page_title)
         except:
             return 0 # Error: Failed to get page title.
-        return page_title
+        return cleaned_page_title
     
     def get_page_author(self):
         page_author = None
@@ -41,10 +44,12 @@ class WebScraper:
     def get_page_posted_date(self):
         page_posted = None
         try:
-            page_posted = self.soup.find('p', class_='posted-on').text
+            page_posted = self.soup.find('p', class_='posted-on').text[10:]
+            date_object = datetime.strptime(page_posted, "%B %d, %Y")
+            formatted_date = date_object.strftime("%m/%d/%Y")
         except:
             return 0 # Error: Failed to get page posted date.
-        return page_posted
+        return formatted_date
     
     def get_sci_check_digest(self):
         sci_digest_list = []
@@ -54,7 +59,7 @@ class WebScraper:
                 p_tags = sci_digest.find_next_siblings("p")
                 for p in p_tags:
                     sci_digest_list.append(p.text)
-            final_sci_digest = " ".join(sci_digest_list)
+            final_sci_digest = ", ".join(sci_digest_list)
             cleaned_sci_digest = self.remove_unicode(final_sci_digest)
             tokenised_sci_digest = nltk.sent_tokenize(cleaned_sci_digest)
         except:
@@ -116,7 +121,7 @@ class WebScraper:
     def get_sentences_citations(self):
         fullstory_tag = self.soup.find("h2", string="Full Story")
         source_tag = fullstory_tag.find_next("h2", string="Sources")
-        sentence_entry = []
+        data = []
         try:
             current_tag = fullstory_tag
             while True:
@@ -127,16 +132,15 @@ class WebScraper:
                     p_text = current_tag.get_text().strip()
                     myString = p_text.replace('\u00a0', ' ')
                     cleaned_paragraphs = self.remove_unicode(myString)
-                    hrefs = [a["evidence"] for a in current_tag.find_all("a", href=True)]
-                    sentence_entry.append({"sentence": cleaned_paragraphs, "hrefs": hrefs})
+                    hrefs = [a["href"] for a in current_tag.find_all("a", href=True)]
+                    data.append({"sentence": cleaned_paragraphs, "hrefs": hrefs})
         except:
             return 0
-        return sentence_entry
+        return data
 
-# url = 'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/'
-url = 'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/'
+url = 'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/'
+# url = 'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/'
 scraper = WebScraper(url)
-
 data = {
     "title": scraper.get_page_title(),
     "author": scraper.get_page_author(),
@@ -144,8 +148,7 @@ data = {
     "sci_digest": scraper.get_sci_check_digest(),
     "paragraphs": scraper.get_paragraph_list()[1],
     "issues": scraper.get_issue_list(),
-    "image_src": scraper.get_image_info()[0],
-    "image_caption": scraper.get_image_info()[1],
+    "image_data": [{"image_src": scraper.get_image_info()[0], "image_caption": scraper.get_image_info()[1]}],
     "data": scraper.get_sentences_citations()
 }
 
