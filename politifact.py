@@ -73,5 +73,5 @@ data['date'] = dates
 data['target'] = targets
 #Show the data set
 print(data)
-data.iloc[:5].to_csv('politifact-joe-biden-sample.csv', index=False, sep=',')
+# data.iloc[:5].to_csv('politifact-joe-biden-sample.csv', index=False, sep=',')
 

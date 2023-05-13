@@ -109,8 +109,11 @@ class WebScraper:
     
     def get_image_info(self):
         img_src, image_caption = None, None
+        c1 = 'alignright size-large is-resized'
+        c2 = 'alignright size-full'
         try:
-            image_div = self.soup.find("figure", class_="alignright size-large is-resized")
+            c =c1 or c2
+            image_div = self.soup.find("figure", class_=c)
             img_tag = image_div.find("img")
             img_src = img_tag['src']
             image_caption = self.soup.find("figcaption", class_="wp-element-caption").text
@@ -138,7 +141,7 @@ class WebScraper:
             return 0
         return data
 
-url = 'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/'
+url = 'https://www.factcheck.org/2023/05/scicheck-covid-19-vaccine-benefits-outweigh-small-risks-contrary-to-flawed-claim-from-u-k-cardiologist/'
 # url = 'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/'
 scraper = WebScraper(url)
 data = {
