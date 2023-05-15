@@ -5,7 +5,6 @@ import json
 import nltk
 from datetime import datetime
 
-
 class WebScraper:
     def __init__(self, url):
         self.url = url
@@ -150,20 +149,50 @@ class WebScraper:
 # url = 'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/'
 # url = 'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/'
 # url = 'https://www.factcheck.org/2023/05/scicheck-posts-share-fake-chelsea-clinton-quote-about-global-childhood-vaccination-effort/'
-url = 'https://www.factcheck.org/2023/05/scicheck-covid-19-vaccine-benefits-outweigh-small-risks-contrary-to-flawed-claim-from-u-k-cardiologist/'
+# url = 'https://www.factcheck.org/2023/05/scicheck-covid-19-vaccine-benefits-outweigh-small-risks-contrary-to-flawed-claim-from-u-k-cardiologist/'
 # url = 'https://www.factcheck.org/2023/04/warming-beyond-1-5-c-harmful-but-not-a-point-of-no-return-as-biden-claims/'
-# url = 'https://www.factcheck.org/2023/04/scicheck-masking-has-minimal-effects-on-respiratory-system-does-not-cause-long-covid/'
-scraper = WebScraper(url)
-data = {
-    "title": scraper.get_page_title(),
-    "author": scraper.get_page_author(),
-    "posted": scraper.get_page_posted_date(),
-    "sci_digest": scraper.get_sci_check_digest(),
-    "paragraphs": scraper.get_paragraph_list()[1],
-    "issues": scraper.get_issue_list(),
-    "image_data": [{"image_src": scraper.get_image_info()[0], "image_caption": scraper.get_image_info()[1]}],
-    "data": scraper.get_sentences_citations()
-}
+url = 'https://www.factcheck.org/2023/04/scicheck-masking-has-minimal-effects-on-respiratory-system-does-not-cause-long-covid/'
+
+# scraper = WebScraper(url)
+# data = {
+#     "title": scraper.get_page_title(),
+#     "author": scraper.get_page_author(),
+#     "posted": scraper.get_page_posted_date(),
+#     "sci_digest": scraper.get_sci_check_digest(),
+#     "paragraphs": scraper.get_paragraph_list()[1],
+#     "issues": scraper.get_issue_list(),
+#     "image_data": [{"image_src": scraper.get_image_info()[0], "image_caption": scraper.get_image_info()[1]}],
+#     "data": scraper.get_sentences_citations()
+# }
+
+# with open("scraped_data.json", "w") as outfile:
+#     json.dump(data, outfile)
+
+urls = [
+    'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/',
+'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/',
+'https://www.factcheck.org/2023/05/scicheck-posts-share-fake-chelsea-clinton-quote-about-global-childhood-vaccination-effort/',
+'https://www.factcheck.org/2023/05/scicheck-covid-19-vaccine-benefits-outweigh-small-risks-contrary-to-flawed-claim-from-u-k-cardiologist/',
+'https://www.factcheck.org/2023/04/warming-beyond-1-5-c-harmful-but-not-a-point-of-no-return-as-biden-claims/',
+'https://www.factcheck.org/2023/04/scicheck-masking-has-minimal-effects-on-respiratory-system-does-not-cause-long-covid/'
+
+]
+
+scraped_data = []
+for url in urls:
+    scraper = WebScraper(url)
+    data = {
+        "url": url,
+        "title": scraper.get_page_title(),
+        "author": scraper.get_page_author(),
+        "posted": scraper.get_page_posted_date(),
+        "sci_digest": scraper.get_sci_check_digest(),
+        "paragraphs": scraper.get_paragraph_list()[1],
+        "issues": scraper.get_issue_list(),
+        "image_data": [{"image_src": scraper.get_image_info()[0], "image_caption": scraper.get_image_info()[1]}],
+        "data": scraper.get_sentences_citations()
+    }
+    scraped_data.append(data)
 
 with open("scraped_data.json", "w") as outfile:
-    json.dump(data, outfile)
+    json.dump(scraped_data, outfile)
