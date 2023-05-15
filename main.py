@@ -30,7 +30,7 @@ class WebScraper:
             page_title = self.soup.title.text[:-15]
             cleaned_page_title = self.remove_unicode(page_title)
         except:
-            return 0 # Error: Failed to get page title.
+            return None # Error: Failed to get page title.
         return cleaned_page_title
     
     def get_page_author(self):
@@ -38,7 +38,7 @@ class WebScraper:
         try:
             page_author = self.soup.find('p', class_='byline').text[4:]
         except:
-            return 0 # Error: Failed to get page author.
+            return None # Error: Failed to get page author.
         return page_author
     
     def get_page_posted_date(self):
@@ -48,7 +48,7 @@ class WebScraper:
             date_object = datetime.strptime(page_posted, "%B %d, %Y")
             formatted_date = date_object.strftime("%m/%d/%Y")
         except:
-            return 0 # Error: Failed to get page posted date.
+            return None # Error: Failed to get page posted date.
         return formatted_date
     
     def get_sci_check_digest(self):
@@ -63,26 +63,31 @@ class WebScraper:
             cleaned_sci_digest = self.remove_unicode(final_sci_digest)
             tokenised_sci_digest = nltk.sent_tokenize(cleaned_sci_digest)
         except:
-            return 0 # Error: Failed to get SciCheck digest.
+            return None # Error: Failed to get SciCheck digest.
         return tokenised_sci_digest
     
     def get_paragraph_list(self):
         paragraph_list = []
         try:
             heading_tag = self.soup.find("h2", string="Full Story")
+            if not heading_tag:
+                heading_tag = self.soup.find("h2")
             next_heading_tag = heading_tag.find_next("h2", string="Sources")
+            if not next_heading_tag:
+                next_heading_tag = self.soup.find("h2")
+
             for sibling in heading_tag.find_next_siblings():
                 if sibling.name == "h2" and sibling == next_heading_tag:
                     break
                 elif sibling.name == "p":
                     paragraph_list.append(sibling)
             final_paragraphs = " ".join([p.text for p in paragraph_list])
-            myString = final_paragraphs.replace('\u00a0', ' ')
-            cleaned_paragraphs = self.remove_unicode(myString)
-            tokenised_paragraphs = nltk.sent_tokenize(cleaned_paragraphs)
-        except:
-            return 0, 0 # Error: Failed to get paragraphs.
-        return paragraph_list, tokenised_paragraphs
+            cleaned_paragraphs = final_paragraphs.replace('\u00a0', ' ')
+            cleaned_paragraphs = self.remove_unicode(cleaned_paragraphs)
+            tokenized_paragraphs = nltk.sent_tokenize(cleaned_paragraphs)
+        except Exception as e:
+            return None, None  # Error: Failed to get paragraphs.
+        return paragraph_list, tokenized_paragraphs
     
     def get_citation_list(self, paragraph_list):
         citation_list = []
@@ -92,7 +97,7 @@ class WebScraper:
                 for link_tag in link_tags:
                     citation_list.append(link_tag["href"])
         except:
-            return 0 # Error: Failed to get citation list.
+            return None # Error: Failed to get citation list.
         return citation_list
     
     def get_issue_list(self):
@@ -104,45 +109,50 @@ class WebScraper:
                 new_string = ''.join(issue_list).replace('\n\n', ',')
                 final_list = [word.strip() for word in new_string.split(',') if word.strip()]
         except:
-            return 0 # Error: Failed to get issue list.
+            return None # Error: Failed to get issue list.
         return final_list
     
     def get_image_info(self):
         img_src, image_caption = None, None
-        c1 = 'alignright size-large is-resized'
-        c2 = 'alignright size-full'
         try:
-            c =c1 or c2
-            image_div = self.soup.find("figure", class_=c)
-            img_tag = image_div.find("img")
-            img_src = img_tag['src']
-            image_caption = self.soup.find("figcaption", class_="wp-element-caption").text
+            div_elements = self.soup.find_all("div", class_="wp-block-image")
+            for div_element in div_elements:
+                img_tag = div_element.find("img", loading="lazy")
+                if img_tag:
+                    img_src = img_tag["src"]
+                    figcaption_element = div_element.find("figcaption", class_="wp-element-caption")
+                    image_caption = figcaption_element.get_text(strip=True)
         except:
-            return 0, 0 # Error: Failed to get image info.
+            return None, None
         return img_src, image_caption
     
     def get_sentences_citations(self):
-        fullstory_tag = self.soup.find("h2", string="Full Story")
-        source_tag = fullstory_tag.find_next("h2", string="Sources")
         data = []
         try:
+            fullstory_tag = self.soup.find("h2", string="Full Story")
+            if not fullstory_tag:
+                fullstory_tag = self.soup.find("h2")
+
             current_tag = fullstory_tag
             while True:
                 current_tag = current_tag.find_next()
-                if current_tag == source_tag:
+                if not current_tag or current_tag.name == "h2":
                     break
                 if current_tag.name == "p" and current_tag.find("a", href=True):
                     p_text = current_tag.get_text().strip()
-                    myString = p_text.replace('\u00a0', ' ')
-                    cleaned_paragraphs = self.remove_unicode(myString)
+                    cleaned_paragraphs = self.remove_unicode(p_text)
                     hrefs = [a["href"] for a in current_tag.find_all("a", href=True)]
                     data.append({"sentence": cleaned_paragraphs, "hrefs": hrefs})
-        except:
-            return 0
+        except Exception as e:
+            return None
         return data
 
-url = 'https://www.factcheck.org/2023/05/scicheck-covid-19-vaccine-benefits-outweigh-small-risks-contrary-to-flawed-claim-from-u-k-cardiologist/'
+# url = 'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/'
 # url = 'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/'
+# url = 'https://www.factcheck.org/2023/05/scicheck-posts-share-fake-chelsea-clinton-quote-about-global-childhood-vaccination-effort/'
+url = 'https://www.factcheck.org/2023/05/scicheck-covid-19-vaccine-benefits-outweigh-small-risks-contrary-to-flawed-claim-from-u-k-cardiologist/'
+# url = 'https://www.factcheck.org/2023/04/warming-beyond-1-5-c-harmful-but-not-a-point-of-no-return-as-biden-claims/'
+# url = 'https://www.factcheck.org/2023/04/scicheck-masking-has-minimal-effects-on-respiratory-system-does-not-cause-long-covid/'
 scraper = WebScraper(url)
 data = {
     "title": scraper.get_page_title(),
