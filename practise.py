@@ -6,14 +6,11 @@ import nltk
 def remove_unicode(string):
     return string.encode('ascii', 'ignore').decode('utf-8')
 
-page = requests.get('https://www.factcheck.org/2022/06/biden-claims-too-much-credit-for-decline-in-covid-19-deaths/')
+page = requests.get('https://www.factcheck.org/2015/02/paul-repeats-baseless-vaccine-claims/')
 soup = BeautifulSoup(page.content, 'html.parser')
 
 paragraph_list = []
-p_tags = soup.find_all('p', attrs={'dir': 'ltr'})
-if not p_tags:
-    p_tags = soup.find_all('p')
-
+p_tags = soup.find_all('p')
 for p_tag in p_tags:
     span_tags = p_tag.find_all('span')
     paragraph_list.extend([tag.get_text(strip=True) for tag in span_tags])
@@ -24,26 +21,57 @@ cleaned_paragraphs = remove_unicode(cleaned_paragraphs)
 tokenized_paragraphs = nltk.sent_tokenize(cleaned_paragraphs)
 print(tokenized_paragraphs)
 
+# soup = BeautifulSoup('./html/web3.html', 'html.parser')
+p_tags = soup.find_all('p')
 
+paragraphs = [tag.get_text(strip=True) for tag in p_tags]
+print(paragraphs)
 
 '''
 def merge_json_files(file1, file2, output_file):
     with open(file1, 'r') as f1, open(file2, 'r') as f2:
         data1 = json.load(f1)
         data2 = json.load(f2)
-    
     merged_data = data1 + data2  # Merge the lists
-    
     with open(output_file, 'w') as outfile:
         json.dump(merged_data, outfile)
-
-
-file1 = 'scraped_data.json'
-file2 = 'remaining.json'
+file1 = './json/scraped_data.json'
+file2 = './json/remaining.json'
 output_file = 'sfact.json'
-
 merge_json_files(file1, file2, output_file)
 
+
+# def get_paragraph_list(soup):
+#     paragraph_list = []
+#     try:
+#         p_tags = soup.find_all('p', attrs={'dir': 'ltr'})
+#         if not p_tags:
+#             p_tags = soup.find_all('p')
+
+#         for p_tag in p_tags:
+#             span_tags = p_tag.find_all('span')
+#             if not span_tags:
+#                 paragraph_list.append(p_tag.get_text(strip=True))
+#             else:
+#                 paragraph_list.extend([tag.get_text(strip=True) for tag in span_tags])
+
+#         final_paragraphs = " ".join(paragraph_list)
+#         cleaned_paragraphs = final_paragraphs.replace('\u00a0', ' ')
+#         cleaned_paragraphs = remove_unicode(cleaned_paragraphs)
+#         tokenized_paragraphs = nltk.sent_tokenize(cleaned_paragraphs)
+
+#         if not tokenized_paragraphs:
+#             raise Exception("No tokenized paragraphs available.")
+
+#     except Exception as e:
+#         print("Error:", str(e))
+#         print("No paragraph-list")
+#         return None, None  # Error: Failed to get paragraphs.
+
+#     return paragraph_list, tokenized_paragraphs
+
+# paragraph_list, tokenized_paragraphs = get_paragraph_list(soup)
+# print(tokenized_paragraphs)
 
 base_url = "https://www.factcheck.org/scicheck/page/"
 num_pages = 51  
