@@ -1,44 +1,50 @@
 import requests
 from bs4 import BeautifulSoup
 import json
-# page = requests.get(
-#     "https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/")
-# soup = BeautifulSoup(page.content, 'html.parser')
+import nltk
 
-html = '''
-<p dir="ltr">
-    <span>Another issue being monitored by scientists is whether boosting could hurt a person’s ability to respond to a future variant, as we have </span>
-    <a href="https://www.factcheck.org/2022/02/scicheck-covid-19-booster-enhances-protection-contrary-to-immune-fatigue-claims/" target="_blank" rel="noopener noreferrer" data-auth="NotApplicable" data-safelink="true" data-linkindex="43">
-        <span>written</span>
-    </a>
-    <span>. But Wherry, who has been following this topic, said there is no indication that is a current risk. “From the data that exists, I see no concern about that whatsoever,” he said. Some animal studies suggest that giving an omicron-only vaccine as a first vaccine dose in animals could be detrimental, he added, but that’s not what is being given to people.</span>
-</p>
-<h3 dir="ltr">
-    <span>What do experts say about who should get the updated shots, and when?</span>
-</h3>
-<div>
-    <p>
-        <span>There is broad agreement that older people and those at higher risk of developing severe COVID-19 should get the new boosters. But experts differ on whether young, healthy people should get another dose.</span>
-    </p>
-    <p>
-        <span>“I don't think that a healthy young person who has already received three doses frankly needs another dose, because I think they are protected against serious illness,” Offit said. “After about six months after their last dose, they're not going to be as protected against mild illness, but that's true of all infections like this one, meaning short incubation period, mucosal infections.”</span>
-    </p>
-    <p>
-        <span>Offit still recommends that people over 75 years old, those with significant underlying health problems and those who are immunocompromised seek out the shots. Those are the groups, he said, that have benefited from the previous boosters.</span>
-    </p>
-</div>
-'''
+def remove_unicode(string):
+    return string.encode('ascii', 'ignore').decode('utf-8')
 
-soup = BeautifulSoup(html, "html.parser")
-span_tags = soup.find_all("span")
+page = requests.get('https://www.factcheck.org/2022/06/biden-claims-too-much-credit-for-decline-in-covid-19-deaths/')
+soup = BeautifulSoup(page.content, 'html.parser')
 
-text_list = [span.get_text(strip=True) for span in span_tags]
+paragraph_list = []
+p_tags = soup.find_all('p', attrs={'dir': 'ltr'})
+if not p_tags:
+    p_tags = soup.find_all('p')
 
-print(text_list)
+for p_tag in p_tags:
+    span_tags = p_tag.find_all('span')
+    paragraph_list.extend([tag.get_text(strip=True) for tag in span_tags])
+
+final_paragraphs = " ".join(paragraph_list)
+cleaned_paragraphs = final_paragraphs.replace('\u00a0', ' ')
+cleaned_paragraphs = remove_unicode(cleaned_paragraphs)
+tokenized_paragraphs = nltk.sent_tokenize(cleaned_paragraphs)
+print(tokenized_paragraphs)
 
 
 
 '''
+def merge_json_files(file1, file2, output_file):
+    with open(file1, 'r') as f1, open(file2, 'r') as f2:
+        data1 = json.load(f1)
+        data2 = json.load(f2)
+    
+    merged_data = data1 + data2  # Merge the lists
+    
+    with open(output_file, 'w') as outfile:
+        json.dump(merged_data, outfile)
+
+
+file1 = 'scraped_data.json'
+file2 = 'remaining.json'
+output_file = 'sfact.json'
+
+merge_json_files(file1, file2, output_file)
+
+
 base_url = "https://www.factcheck.org/scicheck/page/"
 num_pages = 51  
 href_list = []
