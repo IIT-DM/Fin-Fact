@@ -88,6 +88,28 @@ class WebScraper:
             return None, None  # Error: Failed to get paragraphs.
         return paragraph_list, tokenized_paragraphs
     
+    def get_paragraph_list_span(self):
+        paragraph_list = []
+        try:
+            p_tags = self.soup.find_all('p', attrs={'dir': 'ltr'})
+            if not p_tags:
+                p_tags = self.soup.find_all('p')
+            for p_tag in p_tags:
+                span_tags = p_tag.find_all('span')
+                if not span_tags:
+                    paragraph_list.append(p_tag.get_text(strip=True))
+                else:
+                    paragraph_list.extend([tag.get_text(strip=True) for tag in span_tags])
+            final_paragraphs = " ".join(paragraph_list)
+            cleaned_paragraphs = final_paragraphs.replace('\u00a0', ' ')
+            cleaned_paragraphs = self.remove_unicode(cleaned_paragraphs)
+            tokenized_paragraphs = nltk.sent_tokenize(cleaned_paragraphs)
+            if not tokenized_paragraphs:
+                raise Exception("No tokenized paragraphs available.")
+        except Exception as e:
+            return None, None  # Error: Failed to get paragraphs.
+        return paragraph_list, tokenized_paragraphs
+    
     def get_citation_list(self, paragraph_list):
         citation_list = []
         try:
@@ -131,7 +153,6 @@ class WebScraper:
             fullstory_tag = self.soup.find("h2", string="Full Story")
             if not fullstory_tag:
                 fullstory_tag = self.soup.find("h2")
-
             current_tag = fullstory_tag
             while True:
                 current_tag = current_tag.find_next()
@@ -146,6 +167,23 @@ class WebScraper:
             return None
         return data
 
+    def get_sentences_citations_span(self):
+        data = []
+        try:
+            p_tags = self.soup.find_all('p', attrs={'dir': 'ltr'})
+            if not p_tags:
+                p_tags = self.soup.find_all('p')
+
+            for p_tag in p_tags:
+                if p_tag.find('a', href=True):
+                    p_text = p_tag.get_text().strip()
+                    cleaned_paragraphs = self.remove_unicode(p_text)
+                    hrefs = [a['href'] for a in p_tag.find_all('a', href=True)]
+                    data.append({"sentence": cleaned_paragraphs, "hrefs": hrefs})
+        except Exception as e:
+            print(self.url, "No Sentence citations")
+            return None
+        return data
 
 urls = [
     'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/',
