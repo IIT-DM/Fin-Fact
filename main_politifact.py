@@ -25,6 +25,7 @@ class WebScraper:
             div_element = self.soup.find('div', class_='m-statement__quote')
             title = div_element.get_text(strip=True)
             cleaned_title = self.remove_unicode(title)
+            cleaned_title = cleaned_title.replace('\"', '')
         except AttributeError:
             return None # Error: Failed to get page title.
         return cleaned_title
@@ -55,6 +56,7 @@ class WebScraper:
             sci_digest_list = [li.get_text(strip=True) for li in li_tags]
             final_sci_digest = ", ".join(sci_digest_list)
             cleaned_sci_digest = self.remove_unicode(final_sci_digest)
+            cleaned_sci_digest = cleaned_sci_digest.replace('\"', '')
             tokenised_sci_digest = nltk.sent_tokenize(cleaned_sci_digest)
         except AttributeError:
             return None # Error: Failed to get SciCheck digest.
@@ -71,6 +73,7 @@ class WebScraper:
             final_paragraphs = " ".join(paragraph_list)
             cleaned_paragraphs = final_paragraphs.replace('\u00a0', ' ')
             cleaned_paragraphs = self.remove_unicode(cleaned_paragraphs)
+            cleaned_paragraphs = cleaned_paragraphs.replace('\"', '')
             tokenized_paragraphs = nltk.sent_tokenize(cleaned_paragraphs)
         except AttributeError:
             return None, None # Error: Failed to get paragraphs.
@@ -85,12 +88,14 @@ class WebScraper:
                 if href and 'href' in href.attrs:
                     href_text = href['href']
                     sentence = p.get_text(strip=True)
-                    citation_list.append({"sentence": sentence, "hrefs": href_text})
+                    cleaned_sentence = sentence.replace('\u00a0', ' ')
+                    cleaned_sentence = self.remove_unicode(cleaned_sentence)
+                    cleaned_sentence = cleaned_sentence.replace('\"', '')
+                    citation_list.append({"sentence": cleaned_sentence, "hrefs": href_text})
         except AttributeError:
             return None  # Error: Failed to get citation list.
         return citation_list
-
-    
+ 
     def get_issue_list(self):
         issue_list = []
         try:
@@ -103,38 +108,40 @@ class WebScraper:
             return None # Error: Failed to get issue list.
         return issue_list
     
-    # def get_image_info(self):
-    #     img_src, image_caption = None, None
-    #     try:
-    #         div_element = self.soup.find('div', class_='c-image')
-    #         img_element = div_element.find('img')
-    #         img_src = img_element['data-src']
-    #         caption_element = self.soup.find('div', class_='c-image__caption')
-    #         image_caption = caption_element.text.strip()
-    #     except:
-    #         return None, None
-    #     return img_src, image_caption
-
     def get_image_info(self):
-        img_src, image_caption = None, None
         try:
             article_element = self.soup.find('article', class_='m-textblock')
             p_elements = article_element.find_all('p')
+            em_elements = article_element.find_all('em')
+            img_count = 0
             image_captions = []
             for p in p_elements:
                 img_tag = p.find('img')
                 if img_tag:
                     img_src = img_tag['src']
-                    em_tag = p.find('em')
-                    if em_tag:
-                        image_caption = em_tag.get_text(strip=True)
-                    else:
-                        image_caption = None
-                    image_captions.append({"href": img_src, "caption": image_caption})
+                    if img_src:
+                        img_count += 1
+                        if img_count <= len(em_elements):
+                            image_caption = em_elements[img_count - 1].get_text(strip=True)
+                            cleaned_captions = image_caption.replace('\u00a0', ' ')
+                            cleaned_captions = self.remove_unicode(cleaned_captions)
+                            cleaned_captions = cleaned_captions.replace('\"', '')
+                            image_captions.append({"image_src": img_src, "image_caption": cleaned_captions})
         except:
-            return None, None
-        return img_src, image_caption
+            return None
+        return image_captions
 
+    def get_label(self):
+        try:
+            target = self.soup.find_all('div', attrs={'class':'m-statement__meter'})
+            for i in target:
+                label = i.find('div', attrs={'class':'c-image'}).find('img').get('alt')
+                # if label == 'pants-fire':
+                #     label = 'false'
+        except:
+            return None
+        return label
+        
 
 with open("politifact_data.json", "r") as infile:
     data = json.load(infile)
@@ -152,40 +159,12 @@ for url in urls:
         "sci_digest": scraper.get_sci_check_digest(),
         "paragraphs": scraper.get_paragraph_list()[1],
         "issues": scraper.get_issue_list(),
-        "image_data": [{"image_src": scraper.get_image_info()[0], "image_caption": scraper.get_image_info()[1]}],
-        "data": scraper.get_sentences_citations()
+        "image_data": scraper.get_image_info(),
+        "data": scraper.get_sentences_citations(),
+        "label": scraper.get_label()
     }
     scraped_data.append(data)
 
-# Save scraped data to a JSON file
 with open("scraped_data.json", "w") as outfile:
     json.dump(scraped_data, outfile)
-
-# urls = [
-#     'https://www.politifact.com/factchecks/2023/jun/20/steve-milloy/particulate-matter-is-not-junk-science-decades-of/'
-# # 'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/',
-# # 'https://www.factcheck.org/2023/05/scicheck-posts-share-fake-chelsea-clinton-quote-about-global-childhood-vaccination-effort/',
-# # 'https://www.factcheck.org/2023/05/scicheck-covid-19-vaccine-benefits-outweigh-small-risks-contrary-to-flawed-claim-from-u-k-cardiologist/',
-# # 'https://www.factcheck.org/2023/04/warming-beyond-1-5-c-harmful-but-not-a-point-of-no-return-as-biden-claims/',
-# # 'https://www.factcheck.org/2023/04/scicheck-masking-has-minimal-effects-on-respiratory-system-does-not-cause-long-covid/'
-# ]
-
-# scraped_data = []
-# for url in urls:
-#     scraper = WebScraper(url)
-#     data = {
-#         "url": url,
-#         "title": scraper.get_page_title(),
-#         "author": scraper.get_page_author(),
-#         "posted": scraper.get_page_posted_date(),
-#         "sci_digest": scraper.get_sci_check_digest(),
-#         "paragraphs": scraper.get_paragraph_list()[1],
-#         "issues": scraper.get_issue_list(),
-#         "image_data": [{"image_src": scraper.get_image_info()[0], "image_caption": scraper.get_image_info()[1]}],
-#         "data": scraper.get_sentences_citations()
-#     }
-#     scraped_data.append(data)
-
-# with open("scraped_data.json", "w") as outfile:
-#     json.dump(scraped_data, outfile)
 

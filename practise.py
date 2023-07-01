@@ -393,6 +393,26 @@ def get_issue_list():
         issue_list.append(category)
     return issue_list
 
+def get_image_info():
+    try:
+        article_element = soup.find('article', class_='m-textblock')
+        p_elements = article_element.find_all('p')
+        em_elements = article_element.find_all('em')
+        img_count = 0
+        image_captions = []
+        for p in p_elements:
+            img_tag = p.find('img')
+            if img_tag:
+                img_src = img_tag['src']
+                if img_src:
+                    img_count += 1
+                    if img_count <= len(em_elements):
+                        image_caption = em_elements[img_count - 1].get_text(strip=True)
+                        image_captions.append({"image_src": img_src, "image_caption": image_caption})
+    except:
+        return None
+    return image_captions    
+
 # urls = [
 #     'https://www.factcheck.org/2023/04/scicheck-posts-exaggerate-lab-findings-about-covid-19s-impact-on-immune-system/',
 # 'https://www.factcheck.org/2023/04/scicheck-no-evidence-excess-deaths-linked-to-vaccines-contrary-to-claims-online/',
