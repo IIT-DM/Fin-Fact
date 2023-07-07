@@ -167,6 +167,6 @@ for url in urls:
     }
     scraped_data.append(data)
 
-with open("capital_trade_data.json", "w") as outfile:
+with open("./json/economy_data.json", "w") as outfile:
     json.dump(scraped_data, outfile)
 
