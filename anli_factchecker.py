@@ -4,6 +4,12 @@ import json
 
 class FactCheckerApp:
     def __init__(self, hg_model_hub_name='ynie/electra-large-discriminator-snli_mnli_fever_anli_R1_R2_R3-nli'):
+    
+        # hg_model_hub_name = "ynie/albert-xxlarge-v2-snli_mnli_fever_anli_R1_R2_R3-nli"
+        # hg_model_hub_name = "ynie/bart-large-snli_mnli_fever_anli_R1_R2_R3-nli"
+        # hg_model_hub_name = "ynie/electra-large-discriminator-snli_mnli_fever_anli_R1_R2_R3-nli"
+        # hg_model_hub_name = "ynie/xlnet-large-cased-snli_mnli_fever_anli_R1_R2_R3-nli"
+    
         self.max_length = 312
         self.tokenizer = AutoTokenizer.from_pretrained(hg_model_hub_name)
         self.model = AutoModelForSequenceClassification.from_pretrained(hg_model_hub_name)
