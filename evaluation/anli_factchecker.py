@@ -1,6 +1,7 @@
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 import json
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 class FactCheckerApp:
     def __init__(self, hg_model_hub_name='ynie/roberta-large-snli_mnli_fever_anli_R1_R2_R3-nli'):
@@ -10,7 +11,7 @@ class FactCheckerApp:
         # hg_model_hub_name = "ynie/electra-large-discriminator-snli_mnli_fever_anli_R1_R2_R3-nli"
         # hg_model_hub_name = "ynie/xlnet-large-cased-snli_mnli_fever_anli_R1_R2_R3-nli"
     
-        self.max_length = 512
+        self.max_length = 320
         self.tokenizer = AutoTokenizer.from_pretrained(hg_model_hub_name)
         self.model = AutoModelForSequenceClassification.from_pretrained(hg_model_hub_name)
         self.sentences_list = []
@@ -65,11 +66,36 @@ class FactCheckerApp:
         recall = tp / (tp + fn) if tp + fn > 0 else 0
         f1_score = 2 * (precision * recall) / (precision + recall) if precision + recall > 0 else 0
         return f1_score
+    
+    def calculate_metrics(self):
+        tp = sum([1 for t, p in zip(self.labels_list, self.claim_list) if t and p])
+        fp = sum([1 for t, p in zip(self.labels_list, self.claim_list) if not t and p])
+        fn = sum([1 for t, p in zip(self.labels_list, self.claim_list) if t and not p])
+        
+        precision = tp / (tp + fp) if tp + fp > 0 else 0
+        recall = tp / (tp + fn) if tp + fn > 0 else 0
+        f1_score = 2 * (precision * recall) / (precision + recall) if precision + recall > 0 else 0
+        
+        accuracy = accuracy_score(self.labels_list, self.claim_list)
+        conf_matrix = confusion_matrix(self.labels_list, self.claim_list)
+        
+        return precision, accuracy, f1_score, conf_matrix
+
+# if __name__ == "__main__":
+#     fact_checker_app = FactCheckerApp()
+#     fact_checker_app.load_data("finfact.json")
+#     fact_checker_app.preprocess_data()
+#     fact_checker_app.validate_claims()
+#     f1_score = fact_checker_app.calculate_f1_score()
+#     print("F1 score: ", f1_score)
 
 if __name__ == "__main__":
     fact_checker_app = FactCheckerApp()
     fact_checker_app.load_data("finfact.json")
     fact_checker_app.preprocess_data()
     fact_checker_app.validate_claims()
-    f1_score = fact_checker_app.calculate_f1_score()
-    print("F1 score: ", f1_score)
+    precision, accuracy, f1_score, conf_matrix = fact_checker_app.calculate_metrics()
+    print("Precision:", precision)
+    print("Accuracy:", accuracy)
+    print("F1 score:", f1_score)
+    print("Confusion Matrix:\n", conf_matrix)
