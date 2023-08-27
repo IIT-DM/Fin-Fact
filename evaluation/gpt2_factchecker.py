@@ -38,42 +38,26 @@ class FactCheckerApp:
                 # print("Skipping validation for evidence:", evidence)
                 self.claim_list.append(None)
 
-    # def calculate_f1_score(self):
-    #     tp = sum([1 for t, p in zip(self.labels_list, self.claim_list) if t and p])
-    #     fp = sum([1 for t, p in zip(self.labels_list, self.claim_list) if not t and p])
-    #     fn = sum([1 for t, p in zip(self.labels_list, self.claim_list) if t and not p])
-    #     precision = tp / (tp + fp) if tp + fp > 0 else 0
-    #     recall = tp / (tp + fn) if tp + fn > 0 else 0
-    #     f1_score = 2 * (precision * recall) / (precision + recall) if precision + recall > 0 else 0
-    #     return f1_score
+
     
     def calculate_metrics(self):
-        tp = sum([1 for t, p in zip(self.labels_list, self.claim_list) if t and p])
-        fp = sum([1 for t, p in zip(self.labels_list, self.claim_list) if not t and p])
         fn = sum([1 for t, p in zip(self.labels_list, self.claim_list) if t and not p])
-        
+        tp = sum([1 for t, p in zip(self.labels_list, self.claim_list) if t == "true" and p == "true"])
+        fp = sum([1 for t, p in zip(self.labels_list, self.claim_list) if t == "false" and p == "true"])
         precision = tp / (tp + fp) if tp + fp > 0 else 0
         recall = tp / (tp + fn) if tp + fn > 0 else 0
         f1_score = 2 * (precision * recall) / (precision + recall) if precision + recall > 0 else 0
-        
         accuracy = accuracy_score(self.labels_list, self.claim_list)
         conf_matrix = confusion_matrix(self.labels_list, self.claim_list)
         
         return precision, accuracy, f1_score, conf_matrix
-    
-    # def confusion_mat(self):
-    #     conf_mat = confusion_matrix(self.labels_list, self.claim_list)
-    #     return conf_mat
+
 
 if __name__ == "__main__":
     fact_checker_app = FactCheckerApp()
     fact_checker_app.load_data("finfact.json")
     fact_checker_app.preprocess_data()
     fact_checker_app.validate_claims()
-    # f1_score = fact_checker_app.calculate_f1_score()
-    # conf_m = fact_checker_app.confusion_mat()
-    # print("F1 score: ", f1_score)
-    # print("Confusion Matrix: ", conf_m)
     precision, accuracy, f1_score, conf_matrix = fact_checker_app.calculate_metrics()
     print("Precision:", precision)
     print("Accuracy:", accuracy)
