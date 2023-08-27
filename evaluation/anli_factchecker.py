@@ -4,7 +4,7 @@ import json
 from sklearn.metrics import confusion_matrix, accuracy_score
 
 class FactCheckerApp:
-    def __init__(self, hg_model_hub_name='ynie/xlnet-large-cased-snli_mnli_fever_anli_R1_R2_R3-nli'):
+    def __init__(self, hg_model_hub_name='ynie/albert-xxlarge-v2-snli_mnli_fever_anli_R1_R2_R3-nli'):
         # hg_model_hub_name = "ynie/roberta-large-snli_mnli_fever_anli_R1_R2_R3-nli"
         # hg_model_hub_name = "ynie/albert-xxlarge-v2-snli_mnli_fever_anli_R1_R2_R3-nli"
         # hg_model_hub_name = "ynie/bart-large-snli_mnli_fever_anli_R1_R2_R3-nli"
