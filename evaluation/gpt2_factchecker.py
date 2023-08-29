@@ -4,7 +4,7 @@ from transformers import (
 )
 from fact_checking import FactChecker
 import json
-from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.metrics import confusion_matrix, accuracy_score, recall_score
 
 class FactCheckerApp:
     def __init__(self, model_name='fractalego/fact-checking'):
@@ -49,18 +49,19 @@ class FactCheckerApp:
         f1_score = 2 * (precision * recall) / (precision + recall) if precision + recall > 0 else 0
         accuracy = accuracy_score(self.labels_list, self.claim_list)
         conf_matrix = confusion_matrix(self.labels_list, self.claim_list)
+        recall_metric = recall_score(self.labels_list, self.claim_list, pos_label="true")
         
-        return precision, accuracy, f1_score, conf_matrix
-
+        return precision, recall, accuracy, f1_score, conf_matrix, recall_metric
 
 if __name__ == "__main__":
     fact_checker_app = FactCheckerApp()
     fact_checker_app.load_data("finfact.json")
     fact_checker_app.preprocess_data()
     fact_checker_app.validate_claims()
-    precision, accuracy, f1_score, conf_matrix = fact_checker_app.calculate_metrics()
+    precision, accuracy, f1_score, conf_matrix, recall_metric = fact_checker_app.calculate_metrics()
     print("Precision:", precision)
     print("Accuracy:", accuracy)
     print("F1 score:", f1_score)
+    print("Recall: ", recall_metric)
     print("Confusion Matrix:\n", conf_matrix)
     
