@@ -14,7 +14,7 @@ with open('./finfact.json', "r") as infile:
 titles_list = []
 lang_list = []
 for entry in data:
-    titles_list.append(entry["title"])
+    titles_list.append(entry["label"])
 
 for i in titles_list:
     lang = detect(i)

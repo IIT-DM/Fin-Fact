@@ -1,11 +1,11 @@
 import json
-input_file = './finfact_p2.json'
+input_file = './finfact_p2_new.json'
 with open(input_file, "r") as f:
     json_data = json.load(f)
 
 # Remove entries where "label" is "mostly-true"
 # json_data = [entry for entry in json_data if entry.get("label") != "false"]
-json_data = [entry for entry in json_data if entry.get("label") != "half-true"]
+json_data = [entry for entry in json_data if entry.get("label") != "no-flip"]
 
 
 # Define the output file path
