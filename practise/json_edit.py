@@ -16,13 +16,17 @@
 
 import json
 
-file1 = "./json/debt_data.json"
-file2 = "./json/capital_trade_data.json"
-file3 = "./json/state_budget_data.json"
-file4 = "./json/financial_regulation_data.json"
-file5 = "./json/economy_data.json"
-file6 = "./json/taxes_data.json"
-file7 = "./json/trade_data.json"
+file1 = "./json_new/bankruptcy.json"
+file2 = "./json_new/cap_trade.json"
+file3 = "./json_new/campaign_finance.json"
+file4 = "./json_new/financial_regulation.json"
+file5 = "./json_new/city_budget.json"
+file6 = "./json_new/wealth.json"
+file7 = "./json_new/wall_street.json"
+file8 = "./json_new/pensions.json"
+file9 = "./json_new/income.json"
+
+
 
 with open(file1, "r") as f1:
     data1 = json.load(f1)
@@ -38,9 +42,15 @@ with open(file6, "r") as f6:
     data6 = json.load(f6)
 with open(file7, "r") as f7:
     data7 = json.load(f7)
+with open(file8, "r") as f8:
+    data8 = json.load(f8)
+with open(file9, "r") as f9:
+    data9 = json.load(f9)
 
-merged_data = data1 + data2 + data3 + data4 + data5 + data6 + data7
-output_file = "finfact.json"
+
+
+merged_data = data1 + data2 + data3 + data4 + data5 + data6 + data7 + data8 + data9
+output_file = "finfact_p1.json"
 
 with open(output_file, "w") as f:
     json.dump(merged_data, f)
