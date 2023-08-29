@@ -71,12 +71,9 @@ class FactCheckerApp:
         fn = sum([1 for t, p in zip(self.labels_list, self.claim_list) if t and not p])
         tp = sum([1 for t, p in zip(self.labels_list, self.claim_list) if t == "true" and p == "true"])
         fp = sum([1 for t, p in zip(self.labels_list, self.claim_list) if t == "false" and p == "true"])
-
-        
         precision = tp / (tp + fp) if tp + fp > 0 else 0
         recall = tp / (tp + fn) if tp + fn > 0 else 0
         f1_score = 2 * (precision * recall) / (precision + recall) if precision + recall > 0 else 0
-        
         accuracy = accuracy_score(self.labels_list, self.claim_list)
         conf_matrix = confusion_matrix(self.labels_list, self.claim_list)
         

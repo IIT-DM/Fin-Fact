@@ -136,21 +136,21 @@ class WebScraper:
             target = self.soup.find_all('div', attrs={'class':'m-statement__meter'})
             for i in target:
                 label = i.find('div', attrs={'class':'c-image'}).find('img').get('alt')
-                if label == 'pants-fire':
-                    label = 'false'
-                elif label == 'mostly-true':
-                    label = 'true'
+                # if label == 'pants-fire':
+                #     label = 'false'
+                # elif label == 'mostly-true':
+                #     label = 'true'
         except:
             return None
         return label
         
-
-with open("politifact_data.json", "r") as infile:
+with open("./income.json", "r") as infile:
     data = json.load(infile)
     urls = data["url"]
+    labels = data["label"]
 
 scraped_data = []
-for url in urls:
+for url, label in zip(urls,labels):
     print(url)
     scraper = WebScraper(url)
     data = {
@@ -163,10 +163,9 @@ for url in urls:
         "issues": scraper.get_issue_list(),
         "image_data": scraper.get_image_info(),
         "data": scraper.get_sentences_citations(),
-        "label": scraper.get_label()
+        "label": label
     }
     scraped_data.append(data)
 
-with open("./json/economy_data.json", "w") as outfile:
+with open("./json_new/income.json", "w") as outfile:
     json.dump(scraped_data, outfile)
-
