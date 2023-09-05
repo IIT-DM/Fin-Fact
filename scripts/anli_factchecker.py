@@ -69,7 +69,7 @@ class FactCheckerApp:
 
 if __name__ == "__main__":
     fact_checker_app = FactCheckerApp()
-    fact_checker_app.load_data("finfact_new.json")
+    fact_checker_app.load_data("finfact.json")
     fact_checker_app.preprocess_data()
     fact_checker_app.validate_claims()
     precision, accuracy, f1_scoree, conf_matrix, recall_metric, cls_report = fact_checker_app.calculate_metrics()
