@@ -13,13 +13,11 @@
 
 - [Overview](#overview)
 - [Dataset Description](#dataset-description)
+- [Dataset Usage](#dataset-usage)
 - [Leaderboard](#leaderboard)
 - [Dependencies](#dependencies)
 - [Run models for paper metrics](#run-models-for-paper-metrics)
-- [Dataset](#dataset)
-- [Download pre-trained models](#download-pre-trained-models)
-- [Training scripts](#training-scripts)
-- [Verify claims about COVID-19](#verify-claims-about-covid-19)
+- [Evaluation scripts](#evaluation-scripts)
 - [Citation](#citation)
 - [Contact](#contact)
 
@@ -45,19 +43,16 @@ Fin-Fact is a valuable resource for researchers, data scientists, and fact-check
 
 3. **Natural Language Processing (NLP) Tasks**: Utilize the dataset for various NLP tasks such as fact-checking, claim verification, and explanation generation.
 
-4. **Machine Learning Experiments**: Train and evaluate machine learning models, including text and image analysis, using the dataset to enhance the accuracy of fact-checking systems.
+4. **Fact Checking Experiments**: Train and evaluate machine learning models, including text and image analysis, using the dataset to enhance the accuracy of fact-checking systems.
 
-## 📦 Code Repository
+## Leaderboard
 
-This GitHub repository contains code and resources related to the Fin-Fact dataset. Here's what you can find:
+## Dependencies
 
-- **Data Processing**: Code for data preprocessing and cleaning to prepare the dataset for analysis and modeling.
+## 📦 Run models for paper metrics
 
-- **Model Training**: Examples and scripts for training NLP and machine learning models on the dataset.
+We provide scripts let you easily run our dataset on existing state-of-the-art models and re-create the metrics published in paper. You should be able to reproduce our results from the paper by following these instructions. Please post an issue if you're unable to do this.
 
-- **Evaluation Metrics**: Code for evaluating model performance using relevant metrics such as ROUGE scores for explanation generation.
-
-- **Documentation**: In-depth documentation and explanations to assist users in understanding and using the dataset effectively.
 
 ## 🤝 Contributing
 
@@ -69,6 +64,6 @@ Fin-Fact is released under the [MIT License](/LICENSE). Please review the licens
 
 ## 📧 Contact
 
-For questions, feedback, or inquiries related to Fin-Fact, please contact [provide contact information or link].
+For questions, feedback, or inquiries related to Fin-Fact, please contact `arangapur@hawk.iit.edu`.
 
 We hope you find Fin-Fact valuable for your research and fact-checking endeavors. Happy fact-checking!
