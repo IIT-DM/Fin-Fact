@@ -49,10 +49,46 @@ Fin-Fact is a valuable resource for researchers, data scientists, and fact-check
 ## Leaderboard
 
 ## Dependencies
+We recommend you create an anaconda environment:
+
+`conda create --name finfact python=3.6 conda-build`
+
+Then, install Python requirements:
+
+`pip install -r requirements.txt`
+
 
 ## Run models for paper metrics
 
 We provide scripts let you easily run our dataset on existing state-of-the-art models and re-create the metrics published in paper. You should be able to reproduce our results from the paper by following these instructions. Please post an issue if you're unable to do this.
+To run existing ANLI models for fact checking. 
+
+### Run:
+1. BART
+```bash
+python anli.py --model_name 'ynie/bart-large-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
+```
+2. RoBERTa
+```bash
+python anli.py --model_name 'ynie/roberta-large-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
+```
+3. ELECTRA
+```bash
+python anli.py --model_name 'ynie/electra-large-discriminator-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
+```
+4. AlBERT
+```bash
+python anli.py --model_name 'ynie/albert-xxlarge-v2-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
+```
+5. XLNET
+```bash
+python anli.py --model_name 'ynie/xlnet-large-cased-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
+```
+6. GPT-2
+```bash
+python gpt2_nli.py --model_name 'fractalego/fact-checking' --data_file finfact.json
+```
+
 
 ## Citation
 
@@ -65,7 +101,6 @@ We welcome contributions from the community to help improve Fin-Fact. If you hav
 Fin-Fact is released under the [MIT License](/LICENSE). Please review the license before using the dataset.
 
 ## Contact
-
 For questions, feedback, or inquiries related to Fin-Fact, please contact `arangapur@hawk.iit.edu`.
 
 We hope you find Fin-Fact valuable for your research and fact-checking endeavors. Happy fact-checking!
