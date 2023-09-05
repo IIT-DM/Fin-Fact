@@ -17,15 +17,16 @@
 - [Leaderboard](#leaderboard)
 - [Dependencies](#dependencies)
 - [Run models for paper metrics](#run-models-for-paper-metrics)
-- [Evaluation scripts](#evaluation-scripts)
 - [Citation](#citation)
+- [Contribution](#contribution)
+- [License](#license)
 - [Contact](#contact)
 
-## 📜 Overview
+## Overview
 
 Welcome to the Fin-Fact repository! Fin-Fact is a comprehensive dataset designed specifically for financial fact-checking and explanation generation. This README provides an overview of the dataset, how to use it, and other relevant information.
 
-## 📊 Dataset Description
+## Dataset Description
 
 - **Name**: Fin-Fact
 - **Purpose**: Fact-checking and explanation generation in the financial domain.
@@ -33,7 +34,7 @@ Welcome to the Fin-Fact repository! Fin-Fact is a comprehensive dataset designed
 - **Size**: The dataset consists of 3121 claims spanning multiple financial sectors.
 - **Additional Features**: The dataset goes beyond textual claims and incorporates visual elements, including images and their captions.
 
-## 🚀 Dataset Usage
+## Dataset Usage
 
 Fin-Fact is a valuable resource for researchers, data scientists, and fact-checkers in the financial domain. Here's how you can use it:
 
@@ -49,20 +50,21 @@ Fin-Fact is a valuable resource for researchers, data scientists, and fact-check
 
 ## Dependencies
 
-## 📦 Run models for paper metrics
+## Run models for paper metrics
 
 We provide scripts let you easily run our dataset on existing state-of-the-art models and re-create the metrics published in paper. You should be able to reproduce our results from the paper by following these instructions. Please post an issue if you're unable to do this.
 
+## Citation
 
-## 🤝 Contributing
+## Contribution
 
 We welcome contributions from the community to help improve Fin-Fact. If you have suggestions, bug reports, or want to contribute code or data, please check our [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines.
 
-## 📄 License
+## License
 
 Fin-Fact is released under the [MIT License](/LICENSE). Please review the license before using the dataset.
 
-## 📧 Contact
+## Contact
 
 For questions, feedback, or inquiries related to Fin-Fact, please contact `arangapur@hawk.iit.edu`.
 
