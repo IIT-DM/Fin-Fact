@@ -2,9 +2,9 @@
 
 <div align="center">
 
-[![GitHub Issues](https://img.shields.io/github/issues/yourusername/FinFact)](https://github.com/yourusername/FinFact/issues)
-[![GitHub Stars](https://img.shields.io/github/stars/yourusername/FinFact)](https://github.com/yourusername/FinFact/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/yourusername/FinFact)](https://github.com/yourusername/FinFact/network)
+[![GitHub Issues](https://img.shields.io/github/issues/yourusername/FinFact)](https://github.com/IIT-DM/Fin-Fact/issues)
+[![GitHub Stars](https://img.shields.io/github/stars/yourusername/FinFact)](https://github.com/IIT-DM/Fin-Fact/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/yourusername/FinFact)](https://github.com/IIT-DM/Fin-Fact/network)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
 </div>
