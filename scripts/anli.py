@@ -1,16 +1,11 @@
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
+import argparse
 import json
 from sklearn.metrics import confusion_matrix, accuracy_score, recall_score, precision_score, classification_report, f1_score
 
 class FactCheckerApp:
     def __init__(self, hg_model_hub_name='ynie/bart-large-snli_mnli_fever_anli_R1_R2_R3-nli'):
-        # hg_model_hub_name = "ynie/roberta-large-snli_mnli_fever_anli_R1_R2_R3-nli"
-        # hg_model_hub_name = "ynie/albert-xxlarge-v2-snli_mnli_fever_anli_R1_R2_R3-nli"
-        # hg_model_hub_name = "ynie/bart-large-snli_mnli_fever_anli_R1_R2_R3-nli"
-        # hg_model_hub_name = "ynie/electra-large-discriminator-snli_mnli_fever_anli_R1_R2_R3-nli"
-        # hg_model_hub_name = "ynie/xlnet-large-cased-snli_mnli_fever_anli_R1_R2_R3-nli"
-    
         self.max_length = 248
         self.tokenizer = AutoTokenizer.from_pretrained(hg_model_hub_name)
         self.model = AutoModelForSequenceClassification.from_pretrained(hg_model_hub_name)
@@ -41,7 +36,6 @@ class FactCheckerApp:
             attention_mask = torch.Tensor(tokenized_input_seq_pair['attention_mask']).long().unsqueeze(0)
             outputs = self.model(input_ids,
                             attention_mask=attention_mask,
-                            # token_type_ids=token_type_ids,
                             labels=None)
             predicted_probability = torch.softmax(outputs.logits, dim=1)[0].tolist()
             entailment_prob = predicted_probability[0]
@@ -67,11 +61,19 @@ class FactCheckerApp:
         cls_report = classification_report(self.labels_list, self.claim_list, labels=["true", "false", "neutral"])
         return precision, accuracy, f1_scoree, conf_matrix, recall_metric, cls_report
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Fact Checker Application")
+    parser.add_argument("--model_name", default="ynie/bart-large-snli_mnli_fever_anli_R1_R2_R3-nli", help="Name of the pre-trained model to use")
+    parser.add_argument("--data_file", required=True, help="Path to the JSON data file")
+    parser.add_argument("--threshold", type=float, default=0.5, help="Threshold for claim validation")
+    return parser.parse_args()
+
 if __name__ == "__main__":
-    fact_checker_app = FactCheckerApp()
-    fact_checker_app.load_data("finfact.json")
+    args = parse_args()
+    fact_checker_app = FactCheckerApp(hg_model_hub_name=args.model_name)
+    fact_checker_app.load_data(args.data_file)
     fact_checker_app.preprocess_data()
-    fact_checker_app.validate_claims()
+    fact_checker_app.validate_claims(threshold=args.threshold)
     precision, accuracy, f1_scoree, conf_matrix, recall_metric, cls_report = fact_checker_app.calculate_metrics()
     print("Precision:", precision)
     print("Accuracy:", accuracy)
@@ -79,6 +81,4 @@ if __name__ == "__main__":
     print("Recall: ", recall_metric)
     print("Confusion Matrix:\n", conf_matrix)
     print("Report:\n", cls_report)
-
-    
     
