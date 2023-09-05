@@ -16,7 +16,7 @@
 
 # import json
 
-# with open("politifact_data.json", "r") as infile:
+# with open("finfact.json", "r") as infile:
 #     scraped_data = json.load(infile)
 
 # unique_data = []
@@ -28,7 +28,7 @@
 #         unique_data.append(item)
 #         titles_seen.add(title)
 
-# with open("politifact_data.json", "w") as outfile:
+# with open("finfact_new.json", "w") as outfile:
 #     json.dump(unique_data, outfile, indent=4)
 
 # print("Duplicates removed and unique data saved to 'unique_finfact.json'")
@@ -36,7 +36,7 @@
 
 
 import json
-with open("finfact.json", "r") as infile:
+with open("finfact_new.json", "r") as infile:
     scraped_data = json.load(infile)
 label_counts = {}
 for item in scraped_data:

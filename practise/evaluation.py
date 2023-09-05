@@ -9,7 +9,7 @@ def find_unique_elements_with_count(lst):
     return unique_elements, counts
 
 
-with open('./finfact.json', "r") as infile:
+with open('./finfact_new.json', "r") as infile:
     data = json.load(infile)
 titles_list = []
 lang_list = []
@@ -20,8 +20,8 @@ for i in titles_list:
     lang = detect(i)
     lang_list.append(lang)
 
-# myset = set(lang_list)
-# print(myset)
+myset = set(lang_list)
+print(myset)
 
 unique_elements, counts = find_unique_elements_with_count(lang_list)
 print("Unique elements:", unique_elements)

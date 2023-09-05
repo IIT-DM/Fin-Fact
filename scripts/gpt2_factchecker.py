@@ -1,0 +1,74 @@
+from transformers import (
+    GPT2LMHeadModel,
+    GPT2Tokenizer,
+)
+import warnings
+warnings.filterwarnings("ignore")
+
+from fact_checking import FactChecker
+import json
+from sklearn.metrics import confusion_matrix, accuracy_score, recall_score, precision_score, classification_report, f1_score
+
+class FactCheckerApp:
+    def __init__(self, model_name='fractalego/fact-checking'):
+        self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+        self.fact_checking_model = GPT2LMHeadModel.from_pretrained(model_name)
+        self.fact_checker = FactChecker(self.fact_checking_model, self.tokenizer)
+        self.sentences_list = []
+        self.titles_list = []
+        self.labels_list = []
+        self.claim_list = []
+
+    def load_data(self, filename):
+        with open(filename, "r") as infile:
+            self.data = json.load(infile)
+
+    def preprocess_data(self):
+        for entry in self.data:
+            if "data" in entry:
+                self.titles_list.append(entry["title"])
+                _evidence = ' '.join([item["sentence"] for item in entry["data"]])
+                self.sentences_list.append(_evidence)
+                self.labels_list.append(entry["label"])
+
+    def validate_claims(self):
+        for title, evidence in zip(self.titles_list, self.sentences_list):
+            try:
+                # print(title)
+                is_claim_true = self.fact_checker.validate(evidence, title)
+                
+                # print(type(is_claim_true))
+                print(is_claim_true) 
+                # if is_claim_true in ["True", "False"]:
+                #     self.claim_list.append(is_claim_true)
+                # else:
+                #     self.claim_list.append(bool('False'))
+                self.claim_list.append(is_claim_true)
+            except IndexError:
+                # print("Skipping validation for evidence:", evidence)
+                self.claim_list.append(None)
+
+
+    
+    def calculate_metrics(self):
+        precision = precision_score(self.labels_list, self.claim_list, average='binary')
+        accuracy = accuracy_score(self.labels_list, self.claim_list)
+        f1_scoree = f1_score(self.labels_list, self.claim_list, average='binary')
+        conf_matrix = confusion_matrix(self.labels_list, self.claim_list)
+        recall_metric = recall_score(self.labels_list, self.claim_list, pos_label="true", average="binary")
+        cls_report = classification_report(self.labels_list, self.claim_list, labels=["true", "false", "neutral"])
+        return precision, accuracy, f1_scoree, conf_matrix, recall_metric, cls_report
+
+
+if __name__ == "__main__":
+    fact_checker_app = FactCheckerApp()
+    fact_checker_app.load_data("finfact_new.json")
+    fact_checker_app.preprocess_data()
+    fact_checker_app.validate_claims()
+    precision, accuracy, f1_scoree, conf_matrix, recall_metric, cls_report = fact_checker_app.calculate_metrics()
+    print("Precision:", precision)
+    print("Accuracy:", accuracy)
+    print("F1 score:", f1_scoree)
+    print("Recall: ", recall_metric)
+    print("Confusion Matrix:\n", conf_matrix)
+    print("Report:\n", cls_report)
