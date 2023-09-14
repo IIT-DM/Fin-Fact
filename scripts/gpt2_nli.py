@@ -49,7 +49,7 @@ class FactCheckerApp:
 
     def calculate_metrics(self):
         conf_matrix = confusion_matrix(self.labels_list, [str(is_claim).lower() for is_claim in self.claim_list])
-        cls_report = classification_report(self.labels_list, [str(is_claim).lower() for is_claim in self.claim_list], labels=["true", "false"])
+        cls_report = classification_report(self.labels_list, [str(is_claim).lower() for is_claim in self.claim_list], labels=["true", "false", "neutral"])
 
         return conf_matrix, cls_report
 
