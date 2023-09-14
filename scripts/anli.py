@@ -5,7 +5,13 @@ import json
 from sklearn.metrics import confusion_matrix, accuracy_score, recall_score, precision_score, classification_report, f1_score
 
 class FactCheckerApp:
-    def __init__(self, hg_model_hub_name='ynie/bart-large-snli_mnli_fever_anli_R1_R2_R3-nli'):
+    def __init__(self, hg_model_hub_name='ynie/electra-large-discriminator-snli_mnli_fever_anli_R1_R2_R3-nli'):
+        # hg_model_hub_name = "ynie/roberta-large-snli_mnli_fever_anli_R1_R2_R3-nli"
+        # hg_model_hub_name = "ynie/albert-xxlarge-v2-snli_mnli_fever_anli_R1_R2_R3-nli"
+        # hg_model_hub_name = "ynie/bart-large-snli_mnli_fever_anli_R1_R2_R3-nli"
+        # hg_model_hub_name = "ynie/electra-large-discriminator-snli_mnli_fever_anli_R1_R2_R3-nli"
+        # hg_model_hub_name = "ynie/xlnet-large-cased-snli_mnli_fever_anli_R1_R2_R3-nli"
+    
         self.max_length = 248
         self.tokenizer = AutoTokenizer.from_pretrained(hg_model_hub_name)
         self.model = AutoModelForSequenceClassification.from_pretrained(hg_model_hub_name)
