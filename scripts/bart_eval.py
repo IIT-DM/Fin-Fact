@@ -1,8 +1,6 @@
 from transformers import BartTokenizer, BartForConditionalGeneration
-import json, itertools 
+import json, itertools, pyter
 from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
-from nltk.tokenize import word_tokenize
-from nltk.util import ngrams
 
 
 class NLPFactGenerator:
@@ -10,7 +8,7 @@ class NLPFactGenerator:
         self.max_length = 1024
         self.model = BartForConditionalGeneration.from_pretrained(model_name)
         self.tokenizer = BartTokenizer.from_pretrained(model_name)
-        self.gen_fact_list = []
+        self.gen_fact_list = [] 
         self.evidence_list = []
 
     def _split_into_words(self, sentences):
@@ -45,6 +43,17 @@ class NLPFactGenerator:
             generated_facts.append(entry["generated_fact"])
 
         return evidences, generated_facts
+    
+    def ter(self):
+        ref, gen = self.get_title_evidence_generated_facts()
+        if len(ref) == 1:
+            total_score =  pyter.ter(gen[0].split(), ref[0].split())
+        else:
+            total_score = 0
+            for i in range(len(gen)):
+                total_score = total_score + pyter.ter(gen[i].split(), ref[i].split())
+            total_score = total_score/len(gen)
+        return total_score  
 
     def bleu(self):
         evidence_list, gen_fact_list = self.get_title_evidence_generated_facts()
@@ -58,8 +67,7 @@ class NLPFactGenerator:
         score_bleu = corpus_bleu(ref_bleu, gen_bleu, weights=(0, 1, 0, 0), smoothing_function=cc.method4)
         return score_bleu
     
-
-    def rouge_one(self,n=1):
+    def rouge_one(self,n=3):
         evidence_list, gen_fact_list = self.get_title_evidence_generated_facts()
         evaluated_ngrams = self._get_word_ngrams(n, evidence_list)
         reference_ngrams = self._get_word_ngrams(n, gen_fact_list)
@@ -86,6 +94,6 @@ if __name__ == "__main__":
     fact_generator.load_data("generated_facts.json")
     rouge_one_score = fact_generator.rouge_one()
     blue_score = fact_generator.bleu()
-    print(rouge_one_score)
     print(blue_score)
+    print(rouge_one_score)
 

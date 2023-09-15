@@ -59,8 +59,3 @@ if __name__ == "__main__":
         generated_data.append({"title": title, "evidence":evi, "generated_fact": fact})
     with open("generated_facts.json", "w") as outfile:
         json.dump(generated_data, outfile, indent=4)
-
-
-    # def load_data(self, filename, num_instances=3):
-    #     with open(filename, "r") as infile:
-    #         self.data = json.load(infile)[:num_instances]
