@@ -4,3 +4,7 @@ practise/
 json_new/
 .DS_Store
 scripts_old/
+downloaded_data/
+OoC-multi-modal-fc/
+clear.py
+filtered_dataset.json
