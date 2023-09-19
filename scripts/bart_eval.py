@@ -1,13 +1,9 @@
-from transformers import BartTokenizer, BartForConditionalGeneration
 import json, itertools, pyter
 from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
 
 
 class NLPFactGenerator:
-    def __init__(self, model_name="facebook/bart-large-cnn"):
-        self.max_length = 1024
-        self.model = BartForConditionalGeneration.from_pretrained(model_name)
-        self.tokenizer = BartTokenizer.from_pretrained(model_name)
+    def __init__(self):
         self.gen_fact_list = [] 
         self.evidence_list = []
 
@@ -91,7 +87,7 @@ class NLPFactGenerator:
 
 if __name__ == "__main__":
     fact_generator = NLPFactGenerator()
-    fact_generator.load_data("generated_facts.json")
+    fact_generator.load_data("generated_facts_xlsum.json")
     rouge_one_score = fact_generator.rouge_one()
     blue_score = fact_generator.bleu()
     print(blue_score)
