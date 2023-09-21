@@ -17,7 +17,6 @@
 - [Leaderboard](#leaderboard)
 - [Dependencies](#dependencies)
 - [Run models for paper metrics](#run-models-for-paper-metrics)
-- [Citation](#citation)
 - [Contribution](#contribution)
 - [License](#license)
 - [Contact](#contact)
@@ -87,19 +86,6 @@ python anli.py --model_name 'ynie/xlnet-large-cased-snli_mnli_fever_anli_R1_R2_R
 6. GPT-2
 ```bash
 python gpt2_nli.py --model_name 'fractalego/fact-checking' --data_file finfact.json
-```
-
-## Citation
-
-```
-@misc{rangapur2023finfact,
-      title={Fin-Fact: A Benchmark Dataset for Multimodal Financial Fact Checking and Explanation Generation}, 
-      author={Aman Rangapur and Haoran Wang and Kai Shu},
-      year={2023},
-      eprint={2309.08793},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI}
-}
 ```
 
 ## Contribution
