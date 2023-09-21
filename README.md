@@ -14,7 +14,6 @@
 - [Overview](#overview)
 - [Dataset Description](#dataset-description)
 - [Dataset Usage](#dataset-usage)
-- [Leaderboard](#leaderboard)
 - [Dependencies](#dependencies)
 - [Run models for paper metrics](#run-models-for-paper-metrics)
 - [Contribution](#contribution)
@@ -45,7 +44,6 @@ Fin-Fact is a valuable resource for researchers, data scientists, and fact-check
 
 4. **Fact Checking Experiments**: Train and evaluate machine learning models, including text and image analysis, using the dataset to enhance the accuracy of fact-checking systems.
 
-## Leaderboard
 
 ## Dependencies
 We recommend you create an anaconda environment:
