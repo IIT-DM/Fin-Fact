@@ -89,6 +89,19 @@ python anli.py --model_name 'ynie/xlnet-large-cased-snli_mnli_fever_anli_R1_R2_R
 python gpt2_nli.py --model_name 'fractalego/fact-checking' --data_file finfact.json
 ```
 
+## Citation
+
+```
+@misc{rangapur2023finfact,
+      title={Fin-Fact: A Benchmark Dataset for Multimodal Financial Fact Checking and Explanation Generation}, 
+      author={Aman Rangapur and Haoran Wang and Kai Shu},
+      year={2023},
+      eprint={2309.08793},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI}
+}
+```
+
 ## Contribution
 
 We welcome contributions from the community to help improve Fin-Fact. If you have suggestions, bug reports, or want to contribute code or data, please check our [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines.
