@@ -36,7 +36,7 @@ Welcome to the Fin-Fact repository! Fin-Fact is a comprehensive dataset designed
 
 Fin-Fact is a valuable resource for researchers, data scientists, and fact-checkers in the financial domain. Here's how you can use it:
 
-1. **Download the Dataset**: You can download the Fin-Fact dataset [here](https://github.com/IIT-DM/Fin-Fact/blob/FinFact/finfact.json).
+1. **Download the Dataset**: You can download the Fin-Fact dataset [here](https://github.com/IIT-DM/Fin-Fact/blob/FinFact/finfact.json) or via the [Hugging Face Hub](https://huggingface.co/datasets/amanrangapur/Fin-Fact)
 
 2. **Exploratory Data Analysis**: Perform exploratory data analysis to understand the dataset's structure, distribution, and any potential biases.
 
