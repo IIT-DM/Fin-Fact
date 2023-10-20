@@ -32,7 +32,7 @@ Welcome to the Fin-Fact repository! Fin-Fact is a comprehensive dataset designed
 - **Name**: Fin-Fact
 - **Purpose**: Fact-checking and explanation generation in the financial domain.
 - **Labels**: The dataset includes various labels, including Claim, Author, Posted Date, Sci-digest, Justification, Evidence, Evidence href, Image href, Image Caption, Visualisation Bias Label, Issues, and Claim Label.
-- **Size**: The dataset consists of 3121 claims spanning multiple financial sectors.
+- **Size**: The dataset consists of 3562 claims spanning multiple financial sectors.
 - **Additional Features**: The dataset goes beyond textual claims and incorporates visual elements, including images and their captions.
 
 ## Dataset Usage
