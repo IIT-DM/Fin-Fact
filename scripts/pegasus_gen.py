@@ -57,7 +57,7 @@ class NLPFactGenerator:
 
 if __name__ == "__main__":
     fact_generator = NLPFactGenerator()
-    fact_generator.load_data("finfact_old.json")
+    fact_generator.load_data("./finfact.json")
     fact_generator.preprocess_data()
     generated_facts = fact_generator.generate_fact()
     generated_data = []
