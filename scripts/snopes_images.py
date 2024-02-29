@@ -19,7 +19,6 @@ for url in urls:
         p_a_img_tags = start_sibling.find_all_next(['p', 'a', 'img'])
         p_a_img_end_index = p_a_img_tags.index(end_section.find_next(['p', 'a', 'img']))
         p_a_img_tags = p_a_img_tags[:p_a_img_end_index]
-        justification_text = ' '.join(tag.text for tag in p_a_img_tags if tag.name != 'img')
         img_data = []
         for img in p_a_img_tags:
             if img.name == 'img':

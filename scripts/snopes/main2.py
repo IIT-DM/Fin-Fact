@@ -11,6 +11,8 @@ all_data = []
 for url in urls:
     sci_digest = []
     justification_text_lt = []
+    evidence_lt = []
+    issues_lt = ["stock market"]
     r = requests.get(url)
     soup = BeautifulSoup(r.text, 'html.parser')
     title_container = soup.find('section', class_='title-container')
@@ -41,25 +43,44 @@ for url in urls:
         p_a_tags = p_a_tags[:p_a_end_index]
         justification_text = ' '.join(tag.text for tag in p_a_tags)
         justification_text_lt.append(justification_text)
-        
+        p_a_img_tags = start_sibling.find_all_next(['p', 'a', 'img'])
+        p_a_img_end_index = p_a_img_tags.index(end_section.find_next(['p', 'a', 'img']))
+        p_a_img_tags = p_a_img_tags[:p_a_img_end_index]
+        img_data_lt = []
+        for img in p_a_img_tags:
+            if img.name == 'img':
+                src = img['src']
+                parent = img.find_parent()
+                caption_tag = parent.find('figcaption') or parent.find('div', class_='caption') or parent.find('span', class_='caption')
+                caption = caption_tag.text if caption_tag else None
+                img_data_lt.append({
+                    "src": src,
+                    "caption": caption
+                })
+        # print(f'Image data: {img_data_lt}')
         for tag in tags:
             sentence = tag.text
             a_tags = tag.find_all('a')
             hrefs = [a.get('href') for a in a_tags]
             if sentence and hrefs:
+                evidence_lt.append({"sentence": sentence,
+                    "hrefs": hrefs})
                 all_data.append({
                     "url": url,
                     "claim": h1_text,
-                    "sci_digest": sci_digest,
-                    "justification": justification_text,
                     "author": author_name,
                     "posted": published_date,
-                    "sentence": sentence,
-                    "hrefs": hrefs
+                    "sci_digest": sci_digest,
+                    "justification": justification_text,
+                    "issues": issues_lt,
+                    "image_data": img_data_lt,
+                    "evidence": evidence_lt
                     
                 })
-        sci_digest.clear()
-        justification_text_lt.clear()
+        # sci_digest.clear()
+        # justification_text_lt.clear()
+        # evidence_lt.clear()
+        # img_data_lt.clear()
 
 # Save to a JSON file
 with open('all_data.json', 'w') as f:

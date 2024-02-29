@@ -20,7 +20,7 @@ for url in urls:
     title_container = soup.find('section', class_='title-container')
 
     if title_container is None:
-        print("Could not find a section with the class 'title_container'.")
+        print("Could not find a section with the class 'title-container'.")
     else:
         # Find the h1 and h2 tags and extract their text
         h1_text = title_container.find('h1').text
