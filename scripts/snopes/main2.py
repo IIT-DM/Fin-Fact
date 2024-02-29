@@ -21,6 +21,12 @@ for url in urls:
     else:
         h1_text = title_container.find('h1').text
         h2_text = title_container.find('h2').text
+        bytes_text = h2_text.encode('ascii', 'ignore')
+        h2_text = bytes_text.decode()
+        h2_text = h2_text.replace('\u00a0', ' ')
+        h2_text = h2_text.replace('\u2019', '\'')
+        h2_text = h2_text.replace('\u2014', '')
+        h2_text = h2_text.replace('\u00a0', ' ')
         sci_digest.append(h2_text)
         author_name = title_container.find('a', class_='author_link').text.strip()
         published_date = title_container.find('h3', class_='publish_date').text
@@ -67,11 +73,17 @@ for url in urls:
                 caption_tag = parent.find('figcaption') or parent.find('div', class_='caption') or parent.find('span', class_='caption')
                 caption = caption_tag.text if caption_tag else None
                 img_data_lt.append({
-                    "src": src,
-                    "caption": caption
+                    "image_src": src,
+                    "image_caption": caption
                 })
         for tag in tags:
             sentence = tag.text
+            bytes_text = sentence.encode('ascii', 'ignore')
+            sentence = bytes_text.decode()
+            sentence = sentence.replace('\u00a0', ' ')
+            sentence = sentence.replace('\u2019', '\'')
+            sentence = sentence.replace('\u2014', '')
+            sentence = sentence.replace('\u00a0', ' ')
             a_tags = tag.find_all('a')
             hrefs = [a.get('href') for a in a_tags]
             if sentence and hrefs:
