@@ -26,7 +26,12 @@ for url in urls:
         published_date = title_container.find('h3', class_='publish_date').text
         published_date = published_date.replace('Published ', '')
         published_date = datetime.strptime(published_date, '%b %d, %Y').strftime('%m/%d/%Y')
-
+    
+    section_label = soup.find('section', id='fact_check_rating_container')
+    if section_label:
+        div_label = section_label.find('div', class_='rating_title_wrap')
+        if div_label:
+            text_label = div_label.get_text(strip=True)
     start_section = soup.find('section', id='fact_check_rating_container')
     end_section = soup.find('section', class_='author-container')
     if start_section is None:
@@ -42,6 +47,14 @@ for url in urls:
         p_a_end_index = p_a_tags.index(end_section.find_next(['p', 'a']))
         p_a_tags = p_a_tags[:p_a_end_index]
         justification_text = ' '.join(tag.text for tag in p_a_tags)
+        bytes_text = justification_text.encode('ascii', 'ignore')
+        justification_text = bytes_text.decode()
+        justification_text = justification_text.replace('\u00a0', ' ')
+        justification_text = justification_text.replace('\u2019', '\'')
+        justification_text = justification_text.replace('\u2014', '')
+        justification_text = justification_text.replace('\u00a0', ' ')
+        
+
         justification_text_lt.append(justification_text)
         p_a_img_tags = start_sibling.find_all_next(['p', 'a', 'img'])
         p_a_img_end_index = p_a_img_tags.index(end_section.find_next(['p', 'a', 'img']))
@@ -57,7 +70,6 @@ for url in urls:
                     "src": src,
                     "caption": caption
                 })
-        # print(f'Image data: {img_data_lt}')
         for tag in tags:
             sentence = tag.text
             a_tags = tag.find_all('a')
@@ -74,14 +86,9 @@ for url in urls:
                     "justification": justification_text,
                     "issues": issues_lt,
                     "image_data": img_data_lt,
-                    "evidence": evidence_lt
-                    
+                    "evidence": evidence_lt,
+                    "label": text_label
                 })
-        # sci_digest.clear()
-        # justification_text_lt.clear()
-        # evidence_lt.clear()
-        # img_data_lt.clear()
 
-# Save to a JSON file
-with open('all_data.json', 'w') as f:
+with open('stockmarket.json', 'w') as f:
     json.dump(all_data, f, indent=4)
