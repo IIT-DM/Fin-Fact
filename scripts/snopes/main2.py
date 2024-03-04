@@ -3,7 +3,7 @@ import requests
 import json
 from datetime import datetime
 
-with open('urls.json', 'r') as f:
+with open('taxes_urls.json', 'r') as f:
     urls = json.load(f)
 
 all_data = []
@@ -102,5 +102,5 @@ for url in urls:
                     "label": text_label
                 })
 
-with open('stockmarket.json', 'w') as f:
+with open('taxes.json', 'w') as f:
     json.dump(all_data, f, indent=4)

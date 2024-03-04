@@ -3,7 +3,7 @@ import requests
 import json
 from datetime import datetime
 
-with open('urls.json', 'r') as f:
+with open('taxes_urls.json', 'r') as f:
     urls = json.load(f)
 
 all_data = []
@@ -62,5 +62,5 @@ for url in urls:
         justification_text_lt.clear()
 
 # Save to a JSON file
-with open('all_data.json', 'w') as f:
+with open('taxes_all_data.json', 'w') as f:
     json.dump(all_data, f, indent=4)
