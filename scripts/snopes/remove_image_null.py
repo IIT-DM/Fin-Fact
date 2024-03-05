@@ -1,14 +1,14 @@
 import json
 
 # Load your data
-with open('./loss.json', 'r') as f:
+with open('./funds.json', 'r') as f:
     data = json.load(f)
 
 # Filter out instances where "image_data" is null
 filtered_data = [item for item in data if item['image_data']]
 
 # Filter out instances where "image_data" is null or "stock market" is not in "justification"
-filtered_data = [item for item in filtered_data if 'loss' in item['justification']]
+filtered_data = [item for item in filtered_data if 'funds' in item['justification']]
 
 # Filter out instances where "image_data" is null, "stock market" is not in "justification", and remove duplicates in "claim"
 final_data = []
@@ -19,7 +19,7 @@ for item in filtered_data:
         seen_claims.add(item['claim'])
 
 # Save the filtered data
-with open('./scripts/filtered_jsons/filtered_loss.json', 'w') as f:
+with open('./scripts/filtered_jsons/filtered_funds.json', 'w') as f:
     json.dump(final_data, f, indent=4)
 
 
