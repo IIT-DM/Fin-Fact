@@ -3,7 +3,7 @@ import requests
 import json
 from datetime import datetime
 
-with open('funds_urls.json', 'r') as f:
+with open('share_urls.json', 'r') as f:
     urls = json.load(f)
 all_data = []
 for url in urls:
@@ -11,7 +11,7 @@ for url in urls:
     sci_digest = []
     justification_text_lt = []
     evidence_lt = []
-    issues_lt = ["funds"]
+    issues_lt = ["share"]
     r = requests.get(url)
     soup = BeautifulSoup(r.text, 'html.parser')
     title_container = soup.find('section', class_='title-container')
@@ -103,5 +103,5 @@ for url in urls:
                             "label": text_label
                         })
 
-with open('funds.json', 'w') as f:
+with open('share.json', 'w') as f:
     json.dump(all_data, f, indent=4)
