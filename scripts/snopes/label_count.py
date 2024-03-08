@@ -1,7 +1,7 @@
 import json
 
 # Load the JSON file
-with open('./scripts/jsons/b.json', 'r') as f:
+with open('./scripts/jsons/filtered_b.json', 'r') as f:
     data = json.load(f)
 
 # Initialize a dictionary to store the counts

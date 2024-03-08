@@ -1,7 +1,7 @@
 import json
 
 # Load your data
-with open('./new.json', 'r') as f:
+with open('./scripts/jsons/b.json', 'r') as f:
     data = json.load(f)
 
 # Filter out instances where "image_data" is null
@@ -19,7 +19,7 @@ for item in filtered_data:
         seen_claims.add(item['claim'])
 
 # Save the filtered data
-with open('./scripts/filtered_jsons/filtered_new.json', 'w') as f:
+with open('./scripts/filtered_jsons/filtered_b.json', 'w') as f:
     json.dump(final_data, f, indent=4)
 
 
