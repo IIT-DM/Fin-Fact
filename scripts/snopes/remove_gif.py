@@ -1,7 +1,7 @@
 import json
 
 # Load the file
-with open('merged.json', 'r') as f:
+with open('filtered_new.json', 'r') as f:
     data = json.load(f)
 
 # Remove entries where image_src ends with '.gif'
