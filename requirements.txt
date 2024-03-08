@@ -1,7 +1,0 @@
-beautifulsoup4==4.11.1
-fact-checking==0.0.3
-nltk==3.8.1
-transformers==4.9.2
-torch==1.7.1+rocm3.8
-torchaudio==0.7.2
-torchvision==0.8.2+cu110
