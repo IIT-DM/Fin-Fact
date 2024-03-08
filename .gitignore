@@ -10,3 +10,5 @@ clear.py
 filtered_dataset.json
 leaderboard/
 openai_api.py
+filtered_jsons/
+snopes/
