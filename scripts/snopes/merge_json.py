@@ -31,7 +31,7 @@ def merge_jsons(directory):
                 data = json.load(f)
                 merged_data.extend(data)
 
-    with open('merged.json', 'w') as f:
+    with open('snopes.json', 'w') as f:
         json.dump(merged_data, f, indent=4)
 
-merge_jsons('./scripts/filtered_jsons')
+merge_jsons('./scripts/jsons')
