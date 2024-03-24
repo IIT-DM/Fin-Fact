@@ -26,9 +26,9 @@ class FactCheckerApp:
 
     def preprocess_data(self):
         for entry in self.data:
-            if "data" in entry:
-                self.titles_list.append(entry["title"])
-                _evidence = ' '.join([item["sentence"] for item in entry["data"]])
+            if "evidence" in entry:
+                self.titles_list.append(entry["claim"])
+                _evidence = ' '.join([item["sentence"] for item in entry["evidence"]])
                 self.sentences_list.append(_evidence)
                 self.labels_list.append(entry["label"])
 
