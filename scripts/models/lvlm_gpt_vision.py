@@ -1,8 +1,9 @@
 from openai import OpenAI
 import json
 import time 
-client = OpenAI(api_key='xxx')
+import os 
 
+client = OpenAI(api_key=os.environ["API_KEY_OPENAI"])
 
 with open('dataset.json', "r") as infile:
     data = json.load(infile)
