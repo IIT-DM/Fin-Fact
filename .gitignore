@@ -13,8 +13,3 @@ openai_api.py
 filtered_jsons/
 snopes/
 FinFact_images.zip
-finfact_old.json
-scripts/lvlm.py
-new_file.json
-dataset.json
-responses1.json
