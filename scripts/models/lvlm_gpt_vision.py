@@ -18,7 +18,7 @@ for item in data:
                     "content": [
                         {
                             "type": "text",
-                            "text": f'Is it true that {item["claim"]}? True or False? Use the following format to provide your answer: Prediction: [True or False]. Explanation: [put your evidence and reasoning here]. Confidence Level:[please show the percentage].'
+                            "text": f'Is it true that {item["claim"]}? True or False? Use the following format to provide your answer: Prediction: [True or False or NEI(Not Enough Information)]. Explanation: [put your evidence and reasoning here]. Confidence Level:[please show the percentage].'
                         },
                         {
                             "type": "image_url",

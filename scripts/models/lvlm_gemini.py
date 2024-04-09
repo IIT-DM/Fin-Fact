@@ -21,13 +21,16 @@ for item in data:
                 with open(save_path, 'wb') as f:
                     f.write(image_data)
                 image_data = Image.open(save_path)
-                prompt = f'Is it true that {item["claim"]}? True or False? Use the following format to provide your answer: Prediction: [True or False]. Explanation: [put your evidence and reasoning here]. Confidence Level:[please show the percentage].'
+                prompt = f'Is it true that {item["claim"]}? True or False? Use the following format to provide your answer: Prediction: [True or False or NEI(Not Enough Information)]. Explanation: [put your evidence and reasoning here]. Confidence Level:[please show the percentage].'
                 response = model.generate_content([prompt, image_data])
                 os.remove(save_path)
                 print(response.text)
-                responses.append(response.text)
+                responses.append({
+                "claim": item["claim"],
+                "response": response.text
+                })
                 with open("gemini_responses.json", "w") as f:
-                    json.dump(responses, f)
+                    json.dump(responses, f, indent=4)
             else:
                 print(f"Failed to retrieve image from URL: {image_url}")
     except Exception as e:
