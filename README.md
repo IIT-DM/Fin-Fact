@@ -1,7 +1,7 @@
 <p align="center">
 <img center src="https://i.postimg.cc/0j5vKZr8/temp-Image-XFs-Q80.jpg" width = "150" alt="logo">
 </p>
-<h2 align="center">Fin-Fact - Financial Fact-Checking Dataset</h2>
+<h2 align="center">Fin-Fact - Multimodal Financial Fact-Checking Dataset</h2>
 
 <div align="center">
 
