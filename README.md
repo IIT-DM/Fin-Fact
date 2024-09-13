@@ -17,7 +17,7 @@
 - [Overview](#overview)
 - [Dataset Description](#dataset-description)
 - [Dataset Usage](#dataset-usage)
-- [Dependencies](#dependencies)
+- [Installation](#installation)
 - [Run models for paper metrics](#run-models-for-paper-metrics)
 - [Contribution](#contribution)
 - [License](#license)
@@ -52,14 +52,16 @@ dataset = load_dataset("amanrangapur/Fin-Fact")
 4. **Fact Checking Experiments**: Train and evaluate machine learning models, including text and image analysis, using the dataset to enhance the accuracy of fact-checking systems.
 
 
-## Dependencies
-We recommend you create an anaconda environment:
+## Installation
 
-`conda create --name finfact python=3.6 conda-build`
+Requires Python 3.9 to run.
 
-Then, install Python requirements:
+Install conda environment from `environment.yml` file.
 
-`pip install -r requirements.txt`
+```sh
+conda env create -n MMFC --file environment.yml
+conda activate MMFC
+```
 
 
 ## Run models for paper metrics
@@ -67,26 +69,41 @@ Then, install Python requirements:
 We provide scripts let you easily run our dataset on existing state-of-the-art models and re-create the metrics published in paper. You should be able to reproduce our results from the paper by following these instructions. Please post an issue if you're unable to do this.
 To run existing ANLI models for fact checking. 
 
-### Run:
+### Usage for LLM's:
+Please create .env file and set your API key:
+
+```sh
+OPENAI_API_KEY="YOUR KEY"
+GEMINI_API_KEY="YOUR KEY"
+```
+
+To run MLLM experiments:
+
+```sh
+python scripts/models/experiments.py --model [llava/gpt-4/gemini] --prompt_type [open_book/closed_book/cot/symbolic/self_help]
+```
+
+
+### Usage for Language Models:
 1. BART
 ```bash
-python anli.py --model_name 'ynie/bart-large-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
+python scripts/models/anli.py --model_name 'ynie/bart-large-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
 ```
 2. RoBERTa
 ```bash
-python anli.py --model_name 'ynie/roberta-large-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
+python scripts/models/anli.py --model_name 'ynie/roberta-large-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
 ```
 3. ELECTRA
 ```bash
-python anli.py --model_name 'ynie/electra-large-discriminator-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
+python scripts/models/anli.py --model_name 'ynie/electra-large-discriminator-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
 ```
 4. AlBERT
 ```bash
-python anli.py --model_name 'ynie/albert-xxlarge-v2-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
+python scripts/models/anli.py --model_name 'ynie/albert-xxlarge-v2-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
 ```
 5. XLNET
 ```bash
-python anli.py --model_name 'ynie/xlnet-large-cased-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
+python scripts/models/anli.py --model_name 'ynie/xlnet-large-cased-snli_mnli_fever_anli_R1_R2_R3-nli' --data_file finfact.json --threshold 0.5
 ```
 6. GPT-2
 ```bash

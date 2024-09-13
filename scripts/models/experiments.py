@@ -142,14 +142,14 @@ class MLLM_EXP:
             return response
 
     @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(5))
-    def call_openai(self, claim, text_evidence):#, image_list):
+    def call_openai(self, claim, text_evidence, image_list):
         if self.prompt_method == "closed_book":
             system_prompt = closed_book_system
             prompt = f"Claim: {claim}"
 
             response = get_api.get_openai_text_response(
                 prompt,
-                # image_list,
+                image_list,
                 model="gpt-4o-mini",
                 system_prompt=system_prompt,
                 temperature=0.0,
@@ -165,7 +165,7 @@ class MLLM_EXP:
 
             response = get_api.get_openai_text_response(
                 prompt,
-                # image_list,
+                image_list,
                 model="gpt-4",
                 system_prompt=system_prompt,
                 temperature=0.0,
@@ -181,7 +181,7 @@ class MLLM_EXP:
 
             response = get_api.get_openai_text_response(
                 prompt,
-                # image_list,
+                image_list,
                 model="gpt-4",
                 system_prompt=system_prompt,
                 temperature=0.0,
@@ -196,7 +196,7 @@ class MLLM_EXP:
 
             response = get_api.get_openai_text_response(
                 prompt,
-                # image_list,
+                image_list,
                 model="gpt-4",
                 system_prompt=system_prompt,
                 temperature=0.0,
@@ -211,7 +211,7 @@ class MLLM_EXP:
 
             response = get_api.get_openai_text_response(
                 prompt,
-                # image_list,
+                image_list,
                 model="gpt-40-mini",
                 system_prompt=system_prompt,
                 temperature=0.0,
@@ -327,26 +327,26 @@ class MLLM_EXP:
             sci_digest_text = sci_digest[0] if sci_digest else ""
             justification = entry.get("justification", "")
             text_evidence = sci_digest_text + " " + justification
-            # image_list = []
-            # for img in entry.get("image_data", []):
-            #     img_path = self.download_image(img["image_src"])
-            #     if img_path:
-            #         image_list.append(img_path)
+            image_list = []
+            for img in entry.get("image_data", []):
+                img_path = self.download_image(img["image_src"])
+                if img_path:
+                    image_list.append(img_path)
             try:
                 if self.model_name == "gemini":
-                    res = self.call_gemini(claim, text_evidence)#, image_list)
+                    res = self.call_gemini(claim, text_evidence, image_list)
                 elif self.model_name == "gpt-4":
-                    res = self.call_openai(claim, text_evidence)#, image_list)
+                    res = self.call_openai(claim, text_evidence, image_list)
                 elif self.model_name == "llava":
-                    res = self.call_llava(claim, text_evidence)#, image_list)
+                    res = self.call_llava(claim, text_evidence, image_list)
                 
                 results.append(res)
             except Exception as e:
                 print(f"Error processing entry: {e}")
                 results.append("")
 
-            # for img_path in image_list:
-            #     self.cleanup_image(img_path)
+            for img_path in image_list:
+                self.cleanup_image(img_path)
 
         self.save_to_pickle(
             results,
