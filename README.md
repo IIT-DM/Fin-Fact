@@ -80,7 +80,7 @@ GEMINI_API_KEY="YOUR KEY"
 To run MLLM experiments:
 
 ```sh
-python scripts/models/experiments.py --model [llava/gpt-4/gemini] --prompt_type [open_book/closed_book/cot/symbolic/self_help]
+python scripts/models/experiments.py --model ['llava/gpt-4/gemini'] --prompt_type ['open_book/closed_book/cot/symbolic/self_help']
 ```
 
 
