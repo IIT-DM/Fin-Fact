@@ -12,6 +12,6 @@ openai_api.py
 filtered_jsons/
 snopes/
 FinFact_images.zip
-finfact_old.json
 gdrive/
 .env
+Output/
