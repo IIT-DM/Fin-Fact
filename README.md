@@ -59,8 +59,8 @@ Requires Python 3.9 to run.
 Install conda environment from `environment.yml` file.
 
 ```sh
-conda env create -n MMFC --file environment.yml
-conda activate MMFC
+conda env create -n finfact --file environment.yml
+conda activate finfact
 ```
 
 
